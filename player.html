@@ -111,21 +111,27 @@
 
         const video = document.getElementById('videoPlayer');
         const epContainer = document.getElementById('episodesContainer');
+        let currentHls = null; // ตัวแปรเก็บสถานะ HLS เพื่อทำลายและสร้างใหม่เวลาเปลี่ยนตอนอย่างสะอาด
 
         function playStream(url) {
+            // หากมี HLS ค้างอยู่ ให้ทำลายทิ้งก่อนเพื่อป้องกันปัญหาชนกัน
+            if (currentHls) {
+                currentHls.destroy();
+                currentHls = null;
+            }
+
             if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(url);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    video.play().catch(e => console.log("Auto-play blocked:", e));
+                currentHls = new Hls();
+                currentHls.loadSource(url);
+                currentHls.attachMedia(video);
+                currentHls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    video.play().catch(e => console.log("User interaction required to play:", e));
                 });
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // สำหรับ Safari หรืออุปกรณ์ที่รองรับ HLS native
                 video.src = url;
                 video.addEventListener('loadedmetadata', () => {
-                    video.play();
-                });
+                    video.play().catch(e => console.log("User interaction required to play:", e));
+                }, { once: true });
             }
         }
 
@@ -138,7 +144,7 @@
                     foundGroup = data.groups.find(g => g.name === targetTitle);
                 }
 
-                if (foundGroup && foundGroup.stations) {
+                if (foundGroup && foundGroup.stations && foundGroup.stations.length > 0) {
                     epContainer.innerHTML = '';
                     
                     foundGroup.stations.forEach((epItem, index) => {
@@ -149,23 +155,27 @@
                         btn.onclick = () => {
                             document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
                             btn.classList.add('active');
-                            playStream(epItem.url); // เมื่อผู้ใช้กดคลิกเอง จะเล่นได้ปกติเพราะมี User interaction แล้ว
+                            playStream(epItem.url);
                         };
 
                         epContainer.appendChild(btn);
-
-                        // โหลดตอนแรกเตรียมไว้เฉยๆ (ไม่สั่ง play() อัตโนมัติ ป้องกันติด Error บล็อก)
-                        if (index === 0) {
-                            btn.classList.add('active');
-                            if (Hls.isSupported()) {
-                                const hls = new Hls();
-                                hls.loadSource(epItem.url);
-                                hls.attachMedia(video);
-                            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                                video.src = epItem.url;
-                            }
-                        }
                     });
+
+                    // โหลดตอนแรกเตรียมไว้โดยใช้ปุ่มแรก (เซ็ต Active และโหลดซอร์สครั้งเดียวจบ ไม่ซ้ำซ้อน)
+                    const firstBtn = epContainer.querySelector('.ep-btn');
+                    if (firstBtn) {
+                        firstBtn.classList.add('active');
+                    }
+                    
+                    // โหลดซอร์สตอนแรกแบบนิ่งๆ ไม่บังคับสั่ง play() ตอนเปิดหน้าเว็บทันที
+                    if (Hls.isSupported()) {
+                        currentHls = new Hls();
+                        currentHls.loadSource(foundGroup.stations[0].url);
+                        currentHls.attachMedia(video);
+                    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                        video.src = foundGroup.stations[0].url;
+                    }
+
                 } else {
                     epContainer.innerHTML = '<p style="color: #e50914; font-size: 14px;">ไม่พบข้อมูลตอนของซีรีส์นี้</p>';
                 }
