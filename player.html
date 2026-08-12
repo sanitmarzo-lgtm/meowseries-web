@@ -126,7 +126,7 @@
                             document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
                             btn.classList.add('active');
                             
-                            // ใช้ iframe โหลดลิงก์ตรงๆ ปัญหาเรื่อง Refused to set unsafe header จะหายไปทันที
+                            // ใช้ iframe โหลด URL ของตอนนี้โดยตรง เพื่อหลีกเลี่ยงข้อจำกัดเรื่อง Unsafe header
                             videoBox.innerHTML = `<iframe src="${epItem.url}" allowfullscreen="true" scrolling="no" frameborder="0" allow="autoplay; fullscreen"></iframe>`;
                         };
 
