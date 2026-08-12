@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEOWSERIES - เล่นวิดีโอ</title>
+    <!-- โหลด Video.js CSS -->
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
     <style>
         body {
             background-color: #111;
@@ -36,10 +38,10 @@
             align-items: center;
             justify-content: center;
         }
-        iframe {
+        /* ปรับแต่ง Video.js ให้เต็มกล่องพอดี */
+        .video-js {
             width: 100%;
             height: 100%;
-            border: none;
         }
         .playlist-box {
             flex: 1;
@@ -80,8 +82,18 @@
     <h2 id="title">กำลังโหลดข้อมูล...</h2>
 
     <div class="player-container">
-        <div class="video-box" id="videoBox">
-            <p style="color: #777;">กำลังโหลดเครื่องเล่น...</p>
+        <div class="video-box">
+            <!-- ใช้ Video.js HTML5 Player -->
+            <video
+                id="my-video"
+                class="video-js vjs-big-play-button-centered"
+                controls
+                preload="auto"
+                data-setup='{}'>
+                <p class="vjs-no-js">
+                    โปรดเปิดใช้งาน JavaScript เพื่อดูวิดีโอนี้
+                </p>
+            </video>
         </div>
 
         <div class="playlist-box">
@@ -92,6 +104,9 @@
         </div>
     </div>
 
+    <!-- โหลด Video.js JavaScript -->
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const targetTitle = urlParams.get('title') ? decodeURIComponent(urlParams.get('title')) : '';
@@ -101,8 +116,13 @@
             titleElement.innerText = targetTitle;
         }
 
-        const videoBox = document.getElementById('videoBox');
         const epContainer = document.getElementById('episodesContainer');
+        let player = null;
+
+        // เริ่มต้นสร้าง Video.js player
+        document.addEventListener("DOMContentLoaded", function() {
+            player = videojs('my-video');
+        });
 
         // โหลดข้อมูลจากไฟล์ JSON หลัก
         fetch('series.json')
@@ -126,8 +146,14 @@
                             document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
                             btn.classList.add('active');
                             
-                            // ใช้ iframe โหลด URL ของตอนนี้โดยตรง เพื่อหลีกเลี่ยงข้อจำกัดเรื่อง Unsafe header
-                            videoBox.innerHTML = `<iframe src="${epItem.url}" allowfullscreen="true" scrolling="no" frameborder="0" allow="autoplay; fullscreen"></iframe>`;
+                            // เปลี่ยน source และเล่นวิดีโอทันทีเมื่อคลิกเปลี่ยนตอน
+                            if (player) {
+                                player.src({
+                                    src: epItem.url,
+                                    type: 'application/x-mpegURL'
+                                });
+                                player.play().catch(e => console.log("Auto-play restricted:", e));
+                            }
                         };
 
                         epContainer.appendChild(btn);
