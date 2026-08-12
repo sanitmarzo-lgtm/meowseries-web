@@ -78,8 +78,7 @@
 </head>
 <body>
 
-    <!-- จุดนี้คือตัวที่มี id="title" ที่ขาดหายไป -->
-    <h2 id="title">กำลังโหลด...</h2>
+    <h2 id="title">กำลังโหลดข้อมูล...</h2>
 
     <div class="player-container">
         <div class="video-box">
@@ -89,36 +88,41 @@
         <div class="playlist-box">
             <h3>เลือกตอน</h3>
             <div id="episodesContainer" style="display: flex; flex-direction: column; gap: 8px;">
-                <p style="color: #777; font-size: 14px;">กำลังโหลด...</p>
+                <p style="color: #777; font-size: 14px;">กำลังโหลดรายชื่อตอน...</p>
             </div>
         </div>
     </div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const encodedData = urlParams.get('data'); 
-        const videoTitle = urlParams.get('title');
+        const targetTitle = urlParams.get('title') ? decodeURIComponent(urlParams.get('title')) : '';
 
         const titleElement = document.getElementById('title');
-        if (videoTitle && titleElement) {
-            titleElement.innerText = decodeURIComponent(videoTitle);
+        if (titleElement) {
+            titleElement.innerText = targetTitle;
         }
 
         const video = document.getElementById('videoPlayer');
         const epContainer = document.getElementById('episodesContainer');
 
-        if (encodedData) {
-            try {
-                const seriesData = JSON.parse(decodeURIComponent(encodedData));
-                const episodes = seriesData.stations || seriesData.episodes;
+        // โหลดข้อมูลจากไฟล์ JSON หลัก (ตัวอย่างใช้ series.json ลองเปลี่ยนชื่อไฟล์ตามหมวดได้ครับ)
+        fetch('series.json')
+            .then(response => response.json())
+            .then(data => {
+                let foundGroup = null;
 
-                if (episodes && episodes.length > 0) {
+                // ค้นหาซีรีส์ที่ชื่อตรงกับที่คลิกเข้ามา จาก groups
+                if (data.groups) {
+                    foundGroup = data.groups.find(g => g.name === targetTitle);
+                }
+
+                if (foundGroup && foundGroup.stations) {
                     epContainer.innerHTML = '';
                     
-                    episodes.forEach((epItem, index) => {
+                    foundGroup.stations.forEach((epItem, index) => {
                         const btn = document.createElement('button');
                         btn.className = 'ep-btn';
-                        btn.innerText = epItem.name || epItem.ep || `EP ${index + 1}`;
+                        btn.innerText = epItem.name || `EP ${index + 1}`;
                         
                         btn.onclick = () => {
                             document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
@@ -133,13 +137,13 @@
                         }
                     });
                 } else {
-                    epContainer.innerHTML = '<p style="color: #e50914; font-size: 14px;">ไม่พบรายการตอน</p>';
+                    epContainer.innerHTML = '<p style="color: #e50914; font-size: 14px;">ไม่พบข้อมูลตอนของซีรีส์นี้</p>';
                 }
-            } catch (e) {
-                console.error("Parse Error:", e);
-                epContainer.innerHTML = '<p style="color: #e50914; font-size: 14px;">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
-            }
-        }
+            })
+            .catch(err => {
+                console.error("Load JSON Error:", err);
+                epContainer.innerHTML = '<p style="color: #e50914; font-size: 14px;">เกิดข้อผิดพลาดในการโหลดไฟล์ JSON</p>';
+            });
 
         function playVideo(videoUrl) {
             if (!videoUrl) return;
