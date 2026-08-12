@@ -1,51 +1,140 @@
-<script>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeowSeries Player & Episodes</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body {
+            margin: 0;
+            background-color: #141414;
+            color: #ffffff;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .player-container {
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 16/9;
+            background: #000;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+        video {
+            width: 100%;
+            height: 100%;
+        }
+        .episode-section {
+            width: 100%;
+            max-width: 900px;
+        }
+        .episode-title {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            border-left: 4px solid #e50914;
+            padding-left: 10px;
+        }
+        .episode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+        }
+        .ep-btn {
+            background-color: #2f2f2f;
+            color: white;
+            border: none;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .ep-btn:hover, .ep-btn.active {
+            background-color: #e50914;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="movie-title">กำลังโหลดข้อมูล...</h1>
+
+    <div class="player-container">
+        <!-- ใช้ controls และใส่ style ให้เต็มกรอบสวยงาม -->
+        <video id="video" controls></video>
+    </div>
+
+    <div class="episode-section">
+        <div class="episode-title">เลือกตอน</div>
+        <div class="episode-grid" id="episode-list">
+            <!-- รายการตอนจะถูกสร้างอัตโนมัติที่นี่ -->
+        </div>
+    </div>
+
+    <script>
         const urlParams = new URLSearchParams(window.location.search);
         const titleParam = urlParams.get('title') || 'ซีรีส์ของฉัน';
         document.getElementById('movie-title').innerText = titleParam;
 
-        var video = document.getElementById('video');
-        var currentHls = null;
+        const video = document.getElementById('video');
+        let currentHls = null;
 
-        function playVideo(streamUrl, buttonElement) {
+        function playVideo(rawStreamUrl, buttonElement) {
+            // สลับสถานะปุ่มแอคทีฟ
             document.querySelectorAll('.ep-btn').forEach(btn => btn.classList.remove('active'));
             if (buttonElement) buttonElement.classList.add('active');
 
+            // ทำลาย HLS ตัวเก่าทิ้งก่อนโหลดใหม่
             if (currentHls) {
                 currentHls.destroy();
                 currentHls = null;
             }
 
-            let finalStreamUrl = streamUrl;
-            if (streamUrl.startsWith('/')) {
-                finalStreamUrl = 'https://m35.999play4.com' + streamUrl;
-            } else if (!streamUrl.startsWith('http://') && !streamUrl.startsWith('https://')) {
-                finalStreamUrl = 'https://m35.999play4.com/' + streamUrl;
+            // จัดการลิงก์ต้นทางให้สมบูรณ์
+            let finalStreamUrl = rawStreamUrl;
+            if (finalStreamUrl.startsWith('/')) {
+                finalStreamUrl = 'https://m35.999play4.com' + finalStreamUrl;
+            } else if (!finalStreamUrl.startsWith('http://') && !finalStreamUrl.startsWith('https://')) {
+                finalStreamUrl = 'https://m35.999play4.com/' + finalStreamUrl;
             }
 
+            // ส่งผ่าน Cloudflare Worker Proxy ของเรา
             const proxyUrl = 'https://meow-stream-proxy.sarawutocha.workers.dev/?url=' + encodeURIComponent(finalStreamUrl);
 
             if (Hls.isSupported()) {
-                var hls = new Hls({
+                const hls = new Hls({
                     xhrSetup: function (xhr, url) {
+                        // ดักทุกไฟล์ย่อย (.ts / m3u8 ลูก) ให้วิ่งผ่าน Proxy ทั้งหมดโดยอัตโนมัติ
                         if (!url.includes('meow-stream-proxy.sarawutocha.workers.dev')) {
                             let absoluteUrl = url;
                             if (url.startsWith('/')) {
-                                absoluteUrl = 'https://m35.999play4.com' + url;
+                                const targetObj = new URL(finalStreamUrl);
+                                absoluteUrl = targetObj.origin + url;
                             } else if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                                absoluteUrl = 'https://m35.999play4.com/' + url;
+                                absoluteUrl = new URL(url, finalStreamUrl).href;
                             }
                             url = 'https://meow-stream-proxy.sarawutocha.workers.dev/?url=' + encodeURIComponent(absoluteUrl);
                         }
                         xhr.open('GET', url, true);
                     }
                 });
-                
+
                 hls.loadSource(proxyUrl);
                 hls.attachMedia(video);
                 
                 hls.on(Hls.Events.MANIFEST_PARSED, function() {
                     video.play().catch(error => {
-                        console.log("Autoplay prevented by browser policy, click play to start.");
+                        console.log("Autoplay prevented by browser policy:", error);
                     });
                 });
 
@@ -58,17 +147,19 @@
                         }
                     }
                 });
+
                 currentHls = hls;
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = proxyUrl;
                 video.addEventListener('loadedmetadata', function() {
                     video.play().catch(error => {
-                        console.log("Autoplay prevented by browser policy.");
+                        console.log("Autoplay prevented:", error);
                     });
                 });
             }
         }
 
+        // ฟังก์ชันดึงข้อมูลตอนจากไฟล์ JSON ทั้งหมด
         async function loadEpisodes() {
             const jsonFiles = ['series.json', 'anime.json', 'cinema.json', 'vertical.json', 'adult.json'];
             let foundStations = [];
@@ -122,13 +213,12 @@
                 };
                 epListContainer.appendChild(btn);
 
-                // เก็บปุ่มแรกไว้สั่งเล่นรอบเดียวจบ ป้องกันการเรียกซ้ำซ้อน
                 if (index === 0) {
                     firstButton = btn;
                 }
             });
 
-            // สั่งเล่นตอนแรกแค่ครั้งเดียวหลังจากสร้างปุ่มครบทั้งหมดแล้ว
+            // สั่งเล่นตอนแรกอัตโนมัติเมื่อโหลดหน้าเว็บเสร็จ
             if (foundStations.length > 0 && firstButton) {
                 playVideo(foundStations[0].url, firstButton);
             }
@@ -136,3 +226,5 @@
 
         loadEpisodes();
     </script>
+</body>
+</html>
