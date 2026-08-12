@@ -1,87 +1,4 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MeowSeries Player & Episodes</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <style>
-        body {
-            margin: 0;
-            background-color: #141414;
-            color: #ffffff;
-            font-family: sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        h1 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        .player-container {
-            width: 100%;
-            max-width: 900px;
-            aspect-ratio: 16/9;
-            background: #000;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-        }
-        video {
-            width: 100%;
-            height: 100%;
-        }
-        .episode-section {
-            width: 100%;
-            max-width: 900px;
-        }
-        .episode-title {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            border-left: 4px solid #e50914;
-            padding-left: 10px;
-        }
-        .episode-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 10px;
-        }
-        .ep-btn {
-            background-color: #2f2f2f;
-            color: white;
-            border: none;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 4px;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-        .ep-btn:hover, .ep-btn.active {
-            background-color: #e50914;
-        }
-    </style>
-</head>
-<body>
-
-    <h1 id="movie-title">กำลังโหลดข้อมูล...</h1>
-
-    <div class="player-container">
-        <!-- เอา autoplay ออก ตรงนี้เหลือแค่ controls -->
-        <video id="video" controls></video>
-    </div>
-
-    <div class="episode-section">
-        <div class="episode-title">เลือกตอน</div>
-        <div class="episode-grid" id="episode-list">
-            <!-- รายการตอนจะถูกสร้างอัตโนมัติที่นี่ -->
-        </div>
-    </div>
-
-    <script>
+<script>
         const urlParams = new URLSearchParams(window.location.search);
         const titleParam = urlParams.get('title') || 'ซีรีส์ของฉัน';
         document.getElementById('movie-title').innerText = titleParam;
@@ -95,6 +12,7 @@
 
             if (currentHls) {
                 currentHls.destroy();
+                currentHls = null;
             }
 
             let finalStreamUrl = streamUrl;
@@ -126,12 +44,9 @@
                 hls.attachMedia(video);
                 
                 hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    const playPromise = video.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(error => {
-                            console.log("Autoplay blocked, waiting for user interaction:", error);
-                        });
-                    }
+                    video.play().catch(error => {
+                        console.log("Autoplay prevented by browser policy, click play to start.");
+                    });
                 });
 
                 hls.on(Hls.Events.ERROR, function (event, data) {
@@ -147,12 +62,9 @@
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = proxyUrl;
                 video.addEventListener('loadedmetadata', function() {
-                    const playPromise = video.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(error => {
-                            console.log("Autoplay blocked, waiting for user interaction:", error);
-                        });
-                    }
+                    video.play().catch(error => {
+                        console.log("Autoplay prevented by browser policy.");
+                    });
                 });
             }
         }
@@ -198,6 +110,8 @@
                 return;
             }
 
+            let firstButton = null;
+
             foundStations.forEach((station, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'ep-btn';
@@ -208,13 +122,17 @@
                 };
                 epListContainer.appendChild(btn);
 
+                // เก็บปุ่มแรกไว้สั่งเล่นรอบเดียวจบ ป้องกันการเรียกซ้ำซ้อน
                 if (index === 0) {
-                    playVideo(station.url, btn);
+                    firstButton = btn;
                 }
             });
+
+            // สั่งเล่นตอนแรกแค่ครั้งเดียวหลังจากสร้างปุ่มครบทั้งหมดแล้ว
+            if (foundStations.length > 0 && firstButton) {
+                playVideo(foundStations[0].url, firstButton);
+            }
         }
 
         loadEpisodes();
     </script>
-</body>
-</html>
