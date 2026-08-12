@@ -226,9 +226,9 @@
                 `;
                 
                 card.onclick = () => {
-                    const stringData = encodeURIComponent(JSON.stringify(item));
-                    window.location.href = `player.html?title=${encodeURIComponent(item.name)}&data=${stringData}`;
-                };
+    // ส่งไปแค่ชื่อเรื่องและหมวดหมู่/ไฟล์
+    window.location.href = `player.html?title=${encodeURIComponent(item.name)}`;
+};
                 
                 grid.appendChild(card);
             });
