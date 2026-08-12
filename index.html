@@ -205,8 +205,10 @@
                 `;
                 
                 card.onclick = () => {
-                    window.location.href = `player.html?url=${encodeURIComponent(item.url)}&title=${encodeURIComponent(item.name)}`;
-                };
+    // ส่งข้อมูลซีรีส์ทั้งก้อนไปหน้า player
+    const stringData = encodeURIComponent(JSON.stringify(item));
+    window.location.href = `player.html?title=${encodeURIComponent(item.name)}&data=${stringData}`;
+};
                 
                 grid.appendChild(card);
             });
