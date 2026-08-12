@@ -88,7 +88,6 @@
 
     <div class="player-container">
         <div class="video-box">
-            <!-- เอา autoplay ออก เพื่อป้องกันการแย่งโหลดและตัดปัญหา AbortError -->
             <video id="videoPlayer" controls></video>
         </div>
 
@@ -151,6 +150,11 @@
                         btn.className = 'ep-btn';
                         btn.innerText = epItem.name || `EP ${index + 1}`;
                         
+                        // ไฮไลต์ปุ่มแรกไว้เฉยๆ แต่ยังไม่สั่งโหลดหรือเล่นอะไรจนกว่าจะกด
+                        if (index === 0) {
+                            btn.classList.add('active');
+                        }
+
                         btn.onclick = () => {
                             document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
                             btn.classList.add('active');
@@ -158,18 +162,6 @@
                         };
 
                         epContainer.appendChild(btn);
-
-                        // โหลดตอนแรกเตรียมไว้เงียบๆ โดยไม่สั่งเล่นอัตโนมัติ
-                        if (index === 0) {
-                            btn.classList.add('active');
-                            if (Hls.isSupported()) {
-                                currentHls = new Hls();
-                                currentHls.loadSource(epItem.url);
-                                currentHls.attachMedia(video);
-                            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                                video.src = epItem.url;
-                            }
-                        }
                     });
 
                 } else {
