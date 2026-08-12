@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meowseries - Netflix Style</title>
+    <!--บรรทัดนี้สำคัญมาก ต้องแน่ใจว่าชื่อไฟล์ CSS ตรงกัน -->
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-left">
+            <h1 class="logo">MEOWSERIES</h1>
+            <ul class="nav-links">
+                <li><a href="#">หน้าแรก</a></li>
+                <li><a href="#">ซีรีส์จีน</a></li>
+                <li><a href="#">ซับไทย / พากย์ไทย</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Banner / Hero Section -->
+    <section class="banner" style="background: linear-gradient(to top, #141414, transparent), url('https://picsum.photos/1920/1080') center/cover;">
+        <div class="banner-content">
+            <h2 class="banner-title">ชื่อซีรีส์แนะนำ</h2>
+            <p class="banner-desc">เรื่องย่อสั้นๆ ของซีรีส์ไฮไลท์ประจำสัปดาห์ สนุกสุดเหวี่ยงและน่าติดตาม...</p>
+            <div class="banner-buttons">
+                <button class="btn play-btn">▶ เล่น</button>
+                <button class="btn info-btn">ℹ ข้อมูลเพิ่มเติม</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Row Section (รายการวิดีโอ) -->
+    <section class="row">
+        <h2>ซีรีส์มาใหม่</h2>
+        <div class="row-posters">
+            <!-- ตัวอย่าง Card วิดีโอ -->
+            <div class="poster" style="background-image: url('https://picsum.photos/300/450?random=1');"></div>
+            <div class="poster" style="background-image: url('https://picsum.photos/300/450?random=2');"></div>
+            <div class="poster" style="background-image: url('https://picsum.photos/300/450?random=3');"></div>
+            <div class="poster" style="background-image: url('https://picsum.photos/300/450?random=4');"></div>
+            <div class="poster" style="background-image: url('https://picsum.photos/300/450?random=5');"></div>
+        </div>
+    </section>
+
+</body>
+</html>
