@@ -3,67 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meowseries</title>
+    <title>MEOWSERIES - หน้าแรก</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* สไตล์เสริมเพื่อให้จัดเรียงรายการซีรีส์สวยงามสไตล์สตรีมมิ่ง */
+        body {
+            background-color: #111;
+            color: #fff;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 40px;
+        }
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            border-left: 4px solid #e50914;
+            padding-left: 10px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: #1f1f1f;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        .card-content {
+            padding: 12px;
+        }
+        .card-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .card-info {
+            font-size: 12px;
+            color: #aaa;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Navigation Bar -->
-    <header class="navbar">
-        <div class="nav-left">
-            <h1 class="logo">MEOWSERIES</h1>
-            <ul class="nav-links">
-                <li><a href="#">หน้าแรก</a></li>
-                <li><a href="#">ซีรีส์จีน</a></li>
-                <li><a href="#">ซับไทย / พากย์ไทย</a></li>
-            </ul>
-        </div>
+    <!-- ส่วนหัว / เมนูตามดีไซน์ของคุณ -->
+    <header style="padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.8);">
+        <h1 style="color: #e50914; margin: 0; font-size: 22px;">MEOWSERIES</h1>
+        <nav style="display: flex; gap: 20px; font-size: 14px;">
+            <a href="#" style="color: #fff; text-decoration: none;">หน้าแรก</a>
+            <a href="#" style="color: #aaa; text-decoration: none;">ซีรีส์จีน</a>
+            <a href="#" style="color: #aaa; text-decoration: none;">ซับไทย / พากย์ไทย</a>
+        </nav>
     </header>
 
-    <!-- Banner / Hero Section -->
-    <section class="banner" style="background: linear-gradient(to top, #141414, transparent), url('https://picsum.photos/1920/1080') center/cover;">
-        <div class="banner-content">
-            <h2 class="banner-title">ซีรีส์แนะนำ</h2>
-            <p class="banner-desc">อัปเดตซีรีส์ใหม่ล่าสุด สนุกสุดเหวี่ยงและน่าติดตาม...</p>
-            <div class="banner-buttons">
-                <button class="btn play-btn">▶ เล่น</button>
-                <button class="btn info-btn">ℹ ข้อมูลเพิ่มเติม</button>
-            </div>
+    <!-- เนื้อหาหลัก -->
+    <div class="container">
+        <h2 class="section-title">อัปเดตล่าสุด</h2>
+        
+        <!-- พื้นที่แสดงรายการซีรีส์จาก data.json -->
+        <div id="series-grid" class="grid-container">
+            <!-- ข้อมูลจะถูกโหลดมาใส่ตรงนี้อัตโนมัติ -->
         </div>
-    </section>
+    </div>
 
-    <!-- Row Section (ที่ดึงข้อมูลจาก data.json) -->
-    <section class="row">
-        <h2>อัปเดตล่าสุด</h2>
-        <div class="row-posters" id="poster-container">
-            <!-- ข้อมูลจะถูกโหลดจาก data.json มาใส่ตรงนี้ -->
-        </div>
-    </section>
-
+    <!-- สคริปต์ดึงข้อมูลจาก data.json มาแสดง -->
     <script>
-    fetch('data.json')
-        .then(response => response.json())
-        .then(data => {
-            const container = document.getElementById('poster-container');
-            container.innerHTML = ''; 
-            
-            // ใช้ data.stations เพราะข้อมูลของคุณมี key ชื่อ stations ครอบไว้
-            data.stations.forEach(item => {
-                const poster = document.createElement('div');
-                poster.className = 'poster';
-                poster.style.backgroundImage = `url('${item.image}')`;
+        fetch('data.json')
+            .then(response => response.json())
+            .then(data => {
+                const stations = data.stations; // ดึงข้อมูลจากก้อน stations
+                const grid = document.getElementById('series-grid');
                 
-                // แก้ไขส่วนนี้ใน index.html
-poster.onclick = () => {
-    // ส่งลิงก์วิดีโอไปที่หน้า player โดยแนบ URL ไปด้วย
-    window.location.href = `player.html?url=${encodeURIComponent(item.url)}`;
-};
-                
-                container.appendChild(poster);
-            });
-        })
-        .catch(err => console.error('Error:', err));
-</script>
+                stations.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    
+                    card.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}">
+                        <div class="card-content">
+                            <h3 class="card-title">${item.name}</h3>
+                            <p class="card-info">${item.info}</p>
+                        </div>
+                    `;
+                    
+                    // พอกดคลิกที่การ์ดซีรีส์ จะพาไปหน้า player หรือแสดงลิงก์
+                    card.onclick = () => {
+                        // ถ้าคุณมีหน้า player.html สามารถส่งลิงก์แบบนี้ได้:
+                        // window.location.href = `player.html?url=${encodeURIComponent(item.url)}`;
+                        
+                        alert("กำลังเล่นเรื่อง: " + item.name);
+                    };
+                    
+                    grid.appendChild(card);
+                });
+            })
+            .catch(error => console.error('เกิดข้อผิดพลาดในการโหลด data.json:', error));
+    </script>
 
 </body>
 </html>
