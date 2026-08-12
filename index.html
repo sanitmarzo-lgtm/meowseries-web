@@ -41,31 +41,29 @@
     </section>
 
     <script>
-        // ฟังก์ชันดึงข้อมูลจากไฟล์ data.json
-        fetch('data.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('ไม่พบไฟล์ data.json');
-                }
-                return response.json();
-            })
-            .then(data => {
-                const container = document.getElementById('poster-container');
-                container.innerHTML = ''; // เคลียร์ของเก่า
+    fetch('data.json')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('poster-container');
+            container.innerHTML = ''; 
+            
+            // ใช้ data.stations เพราะข้อมูลของคุณมี key ชื่อ stations ครอบไว้
+            data.stations.forEach(item => {
+                const poster = document.createElement('div');
+                poster.className = 'poster';
+                poster.style.backgroundImage = `url('${item.image}')`;
                 
-                data.forEach(item => {
-                    const poster = document.createElement('div');
-                    poster.className = 'poster';
-                    poster.style.backgroundImage = `url('${item.image}')`;
-                    poster.onclick = () => window.open(item.link, '_blank');
-                    container.appendChild(poster);
-                });
-            })
-            .catch(err => {
-                console.error(err);
-                document.getElementById('poster-container').innerHTML = '<p style="padding: 20px;">กรุณาอัปโหลดไฟล์ data.json ก่อนครับ</p>';
+                // แก้ไขส่วนนี้ใน index.html
+poster.onclick = () => {
+    // ส่งลิงก์วิดีโอไปที่หน้า player โดยแนบ URL ไปด้วย
+    window.location.href = `player.html?url=${encodeURIComponent(item.url)}`;
+};
+                
+                container.appendChild(poster);
             });
-    </script>
+        })
+        .catch(err => console.error('Error:', err));
+</script>
 
 </body>
 </html>
