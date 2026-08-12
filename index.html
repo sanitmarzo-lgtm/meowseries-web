@@ -105,11 +105,9 @@
                     
                     // พอกดคลิกที่การ์ดซีรีส์ จะพาไปหน้า player หรือแสดงลิงก์
                     card.onclick = () => {
-                        // ถ้าคุณมีหน้า player.html สามารถส่งลิงก์แบบนี้ได้:
-                        // window.location.href = `player.html?url=${encodeURIComponent(item.url)}`;
-                        
-                        alert("กำลังเล่นเรื่อง: " + item.name);
-                    };
+    // ส่งชื่อและลิงก์ m3u8 ไปเปิดที่หน้า player.html
+    window.location.href = `player.html?url=${encodeURIComponent(item.url)}&title=${encodeURIComponent(item.name)}`;
+};
                     
                     grid.appendChild(card);
                 });
