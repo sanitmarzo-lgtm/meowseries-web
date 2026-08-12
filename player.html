@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEOWSERIES - เล่นวิดีโอ</title>
-    <!-- โหลด Video.js CSS -->
-    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <!-- โหลด Clappr Player จาก CDN -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
     <style>
         body {
             background-color: #111;
@@ -38,8 +38,7 @@
             align-items: center;
             justify-content: center;
         }
-        /* ปรับแต่ง Video.js ให้เต็มกล่องพอดี */
-        .video-js {
+        #player-wrapper {
             width: 100%;
             height: 100%;
         }
@@ -83,17 +82,7 @@
 
     <div class="player-container">
         <div class="video-box">
-            <!-- ใช้ Video.js HTML5 Player -->
-            <video
-                id="my-video"
-                class="video-js vjs-big-play-button-centered"
-                controls
-                preload="auto"
-                data-setup='{}'>
-                <p class="vjs-no-js">
-                    โปรดเปิดใช้งาน JavaScript เพื่อดูวิดีโอนี้
-                </p>
-            </video>
+            <div id="player-wrapper"></div>
         </div>
 
         <div class="playlist-box">
@@ -103,9 +92,6 @@
             </div>
         </div>
     </div>
-
-    <!-- โหลด Video.js JavaScript -->
-    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -119,10 +105,22 @@
         const epContainer = document.getElementById('episodesContainer');
         let player = null;
 
-        // เริ่มต้นสร้าง Video.js player
-        document.addEventListener("DOMContentLoaded", function() {
-            player = videojs('my-video');
-        });
+        function loadPlayer(videoUrl) {
+            // ทำลายตัวเล่นเก่าทิ้งก่อนสร้างใหม่
+            if (player) {
+                player.destroy();
+            }
+
+            // สร้าง Clappr Player ใหม่
+            player = new Clappr.Player({
+                source: videoUrl,
+                parentId: "#player-wrapper",
+                width: '100%',
+                height: '100%',
+                autoPlay: false, // ปิดการเล่นอัตโนมัติเพื่อป้องกัน Error จากเบราว์เซอร์
+                mute: false
+            });
+        }
 
         // โหลดข้อมูลจากไฟล์ JSON หลัก
         fetch('series.json')
@@ -145,21 +143,15 @@
                         btn.onclick = () => {
                             document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
                             btn.classList.add('active');
-                            
-                            // เปลี่ยน source และเล่นวิดีโอทันทีเมื่อคลิกเปลี่ยนตอน
-                            if (player) {
-                                player.src({
-                                    src: epItem.url,
-                                    type: 'application/x-mpegURL'
-                                });
-                                player.play().catch(e => console.log("Auto-play restricted:", e));
-                            }
+                            loadPlayer(epItem.url);
                         };
 
                         epContainer.appendChild(btn);
 
+                        // โหลดตอนแรกเตรียมไว้ แต่ไม่สั่งเล่นอัตโนมัติเพื่อเลี่ยง Error
                         if (index === 0) {
-                            btn.click(); // เล่นตอนแรกอัตโนมัติ
+                            btn.classList.add('active');
+                            loadPlayer(epItem.url);
                         }
                     });
                 } else {
