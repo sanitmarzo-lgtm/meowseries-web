@@ -1,10 +1,12 @@
 [
   {
-    "title": "ซีรีส์จีนยอดฮิต",
-    "image": "https://picsum.photos/300/450?random=1"
+    "title": "ซีรีส์เรื่องที่ 1",
+    "image": "https://link-รูปภาพ-ซีรีส์.jpg",
+    "link": "https://link-หน้าดูซีรีส์.com"
   },
   {
-    "title": "อนิเมะมาใหม่",
-    "image": "https://picsum.photos/300/450?random=2"
+    "title": "ซีรีส์เรื่องที่ 2",
+    "image": "https://link-รูปภาพ-ซีรีส์.jpg",
+    "link": "https://link-หน้าดูซีรีส์.com"
   }
 ]
