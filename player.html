@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEOWSERIES - เล่นวิดีโอ</title>
-    <!-- ใส่ HLS.js สำหรับเล่นไฟล์ m3u8 -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
@@ -21,6 +20,7 @@
         h2#title {
             font-size: 20px;
             margin-bottom: 15px;
+            color: #fff;
         }
         .player-container {
             display: flex;
@@ -78,19 +78,18 @@
 </head>
 <body>
 
-    <h2 id="title">กำลังโหลดข้อมูล...</h2>
+    <!-- จุดนี้คือตัวที่มี id="title" ที่ขาดหายไป -->
+    <h2 id="title">กำลังโหลด...</h2>
 
     <div class="player-container">
-        <!-- ช่องเล่นวิดีโอ -->
         <div class="video-box">
             <video id="videoPlayer" controls playsinline></video>
         </div>
 
-        <!-- รายการเลือกตอน -->
         <div class="playlist-box">
             <h3>เลือกตอน</h3>
             <div id="episodesContainer" style="display: flex; flex-direction: column; gap: 8px;">
-                <p style="color: #777; font-size: 14px;">กำลังโหลดรายชื่อตอน...</p>
+                <p style="color: #777; font-size: 14px;">กำลังโหลด...</p>
             </div>
         </div>
     </div>
@@ -100,21 +99,21 @@
         const encodedData = urlParams.get('data'); 
         const videoTitle = urlParams.get('title');
 
+        const titleElement = document.getElementById('title');
+        if (videoTitle && titleElement) {
+            titleElement.innerText = decodeURIComponent(videoTitle);
+        }
+
         const video = document.getElementById('videoPlayer');
         const epContainer = document.getElementById('episodesContainer');
 
-        if (videoTitle) {
-            document.getElementById('title').innerText = decodeURIComponent(videoTitle);
-        }
-
         if (encodedData) {
             try {
-                // แปลงข้อมูลที่ส่งมาทาง URL
                 const seriesData = JSON.parse(decodeURIComponent(encodedData));
                 const episodes = seriesData.stations || seriesData.episodes;
 
                 if (episodes && episodes.length > 0) {
-                    epContainer.innerHTML = ''; // ล้างคำว่ากำลังโหลดออก
+                    epContainer.innerHTML = '';
                     
                     episodes.forEach((epItem, index) => {
                         const btn = document.createElement('button');
@@ -129,20 +128,17 @@
 
                         epContainer.appendChild(btn);
 
-                        // เล่นตอนแรกให้อัตโนมัติ
                         if (index === 0) {
                             btn.click();
                         }
                     });
                 } else {
-                    epContainer.innerHTML = '<p style="color: #e50914; font-size: 14px;">ไม่พบรายการตอนในเรื่องนี้</p>';
+                    epContainer.innerHTML = '<p style="color: #e50914; font-size: 14px;">ไม่พบรายการตอน</p>';
                 }
             } catch (e) {
-                console.error("JSON Parse Error:", e);
+                console.error("Parse Error:", e);
                 epContainer.innerHTML = '<p style="color: #e50914; font-size: 14px;">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
             }
-        } else {
-            epContainer.innerHTML = '<p style="color: #e50914; font-size: 14px;">ไม่พบข้อมูลซีรีส์</p>';
         }
 
         function playVideo(videoUrl) {
