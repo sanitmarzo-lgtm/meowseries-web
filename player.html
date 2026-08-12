@@ -152,10 +152,12 @@
                         btn.innerText = epItem.name || `EP ${index + 1}`;
                         
                         btn.onclick = () => {
-                            document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
-                            btn.classList.add('active');
-                            playVideo(epItem.url);
-                        };
+    document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    // เปิดลิงก์สตรีม .m3u8 ตรงในแท็บใหม่ เพื่อให้เบราว์เซอร์หรือเครื่องเล่นภายนอกจัดการแทน
+    window.open(epItem.url, '_blank');
+};
 
                         epContainer.appendChild(btn);
 
