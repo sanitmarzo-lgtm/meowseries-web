@@ -1,59 +1,168 @@
-<script>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEOWSERIES - เล่นวิดีโอ</title>
+    <!-- ใส่ HLS.js สำหรับเล่นไฟล์ m3u8 -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body {
+            background-color: #111;
+            color: #fff;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+        h2#title {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        .player-container {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+            max-height: calc(100vh - 80px);
+        }
+        .video-box {
+            flex: 3;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            outline: none;
+        }
+        .playlist-box {
+            flex: 1;
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 250px;
+        }
+        .playlist-box h3 {
+            font-size: 16px;
+            margin: 0 0 10px 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 8px;
+        }
+        .ep-btn {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 10px;
+            text-align: left;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .ep-btn:hover, .ep-btn.active {
+            background: #e50914;
+            border-color: #e50914;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 id="title">กำลังโหลดข้อมูล...</h2>
+
+    <div class="player-container">
+        <!-- ช่องเล่นวิดีโอ -->
+        <div class="video-box">
+            <video id="videoPlayer" controls playsinline></video>
+        </div>
+
+        <!-- รายการเลือกตอน -->
+        <div class="playlist-box">
+            <h3>เลือกตอน</h3>
+            <div id="episodesContainer" style="display: flex; flex-direction: column; gap: 8px;">
+                <p style="color: #777; font-size: 14px;">กำลังโหลดรายชื่อตอน...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
         const urlParams = new URLSearchParams(window.location.search);
         const encodedData = urlParams.get('data'); 
         const videoTitle = urlParams.get('title');
+
+        const video = document.getElementById('videoPlayer');
+        const epContainer = document.getElementById('episodesContainer');
 
         if (videoTitle) {
             document.getElementById('title').innerText = decodeURIComponent(videoTitle);
         }
 
-        const video = document.getElementById('videoPlayer');
-        const epContainer = document.getElementById('episodesContainer');
-
         if (encodedData) {
-            // แปลงข้อมูลซีรีส์กลับมาเป็น Object
-            const seriesData = JSON.parse(decodeURIComponent(encodedData));
+            try {
+                // แปลงข้อมูลที่ส่งมาทาง URL
+                const seriesData = JSON.parse(decodeURIComponent(encodedData));
+                const episodes = seriesData.stations || seriesData.episodes;
 
-            // เช็คว่ามีรายการตอนใน stations หรือไม่ (รองรับโครงสร้าง groups ของคุณ)
-            const episodes = seriesData.stations || seriesData.episodes;
-
-            if (episodes && episodes.length > 0) {
-                episodes.forEach((epItem, index) => {
-                    const btn = document.createElement('button');
-                    btn.className = 'ep-btn';
-                    btn.innerText = epItem.name || epItem.ep; // ดึงชื่อตอนมาแสดง
+                if (episodes && episodes.length > 0) {
+                    epContainer.innerHTML = ''; // ล้างคำว่ากำลังโหลดออก
                     
-                    btn.onclick = () => {
-                        document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
-                        btn.classList.add('active');
+                    episodes.forEach((epItem, index) => {
+                        const btn = document.createElement('button');
+                        btn.className = 'ep-btn';
+                        btn.innerText = epItem.name || epItem.ep || `EP ${index + 1}`;
                         
-                        playVideo(epItem.url); // เล่นลิงก์ m3u8 ของตอนนี้
-                    };
+                        btn.onclick = () => {
+                            document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                            playVideo(epItem.url);
+                        };
 
-                    epContainer.appendChild(btn);
+                        epContainer.appendChild(btn);
 
-                    // กดเล่นตอนแรกให้อัตโนมัติเมื่อเปิดหน้าเว็บ
-                    if (index === 0) {
-                        btn.click();
-                    }
-                });
+                        // เล่นตอนแรกให้อัตโนมัติ
+                        if (index === 0) {
+                            btn.click();
+                        }
+                    });
+                } else {
+                    epContainer.innerHTML = '<p style="color: #e50914; font-size: 14px;">ไม่พบรายการตอนในเรื่องนี้</p>';
+                }
+            } catch (e) {
+                console.error("JSON Parse Error:", e);
+                epContainer.innerHTML = '<p style="color: #e50914; font-size: 14px;">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
             }
+        } else {
+            epContainer.innerHTML = '<p style="color: #e50914; font-size: 14px;">ไม่พบข้อมูลซีรีส์</p>';
         }
 
         function playVideo(videoUrl) {
+            if (!videoUrl) return;
+            
             if (Hls.isSupported()) {
                 const hls = new Hls();
                 hls.loadSource(videoUrl);
                 hls.attachMedia(video);
                 hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play();
+                    video.play().catch(err => console.log("Autoplay blocked:", err));
                 });
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = videoUrl;
-                video.play();
+                video.play().catch(err => console.log("Autoplay blocked:", err));
             } else {
                 video.src = videoUrl;
-                video.play();
+                video.play().catch(err => console.log("Autoplay blocked:", err));
             }
         }
     </script>
+</body>
+</html>
