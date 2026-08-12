@@ -146,23 +146,34 @@
             });
 
         function playVideo(videoUrl) {
-            if (!videoUrl) return;
-            
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(videoUrl);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(err => console.log("Autoplay blocked:", err));
-                });
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = videoUrl;
-                video.play().catch(err => console.log("Autoplay blocked:", err));
-            } else {
-                video.src = videoUrl;
-                video.play().catch(err => console.log("Autoplay blocked:", err));
-            }
+    if (!videoUrl) return;
+
+    // ล้างตัวเล่นเก่าก่อนถ้ามี
+    if (window.hls) {
+        window.hls.destroy();
+    }
+
+    // กำหนด config เพื่อส่งค่า referer ตามที่อยู่ใน JSON
+    // (หมายเหตุ: ใน JSON คุณมีค่า "referer" เตรียมไว้ให้แล้ว)
+    const hlsConfig = {
+        xhrSetup: function (xhr, url) {
+            // โค้ดนี้จะพยายามส่งค่า referer ถ้าเบราว์เซอร์อนุญาต
+            xhr.setRequestHeader('Referer', 'https://main.24playerhd.com/');
         }
+    };
+
+    if (Hls.isSupported()) {
+        window.hls = new Hls(hlsConfig);
+        window.hls.loadSource(videoUrl);
+        window.hls.attachMedia(video);
+        window.hls.on(Hls.Events.MANIFEST_PARSED, function() {
+            video.play().catch(e => console.log("กด Play เอง:", e));
+        });
+    } else {
+        video.src = videoUrl;
+        video.play();
+    }
+}
     </script>
 </body>
 </html>
