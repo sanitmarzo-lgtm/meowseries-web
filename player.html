@@ -149,15 +149,21 @@
                         btn.onclick = () => {
                             document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
                             btn.classList.add('active');
-                            playStream(epItem.url);
+                            playStream(epItem.url); // เมื่อผู้ใช้กดคลิกเอง จะเล่นได้ปกติเพราะมี User interaction แล้ว
                         };
 
                         epContainer.appendChild(btn);
 
-                        // เล่นตอนแรกให้อัตโนมัติทันทีที่เข้าหน้าเว็บ
+                        // โหลดตอนแรกเตรียมไว้เฉยๆ (ไม่สั่ง play() อัตโนมัติ ป้องกันติด Error บล็อก)
                         if (index === 0) {
                             btn.classList.add('active');
-                            playStream(epItem.url);
+                            if (Hls.isSupported()) {
+                                const hls = new Hls();
+                                hls.loadSource(epItem.url);
+                                hls.attachMedia(video);
+                            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                                video.src = epItem.url;
+                            }
                         }
                     });
                 } else {
