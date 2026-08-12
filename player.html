@@ -123,8 +123,14 @@
                 
                 hls.loadSource(proxyUrl);
                 hls.attachMedia(video);
+                
                 hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(e => console.log("Autoplay blocked:", e));
+                    const playPromise = video.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.log("Autoplay blocked, waiting for user interaction:", error);
+                        });
+                    }
                 });
 
                 hls.on(Hls.Events.ERROR, function (event, data) {
@@ -140,7 +146,12 @@
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = proxyUrl;
                 video.addEventListener('loadedmetadata', function() {
-                    video.play();
+                    const playPromise = video.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.log("Autoplay blocked, waiting for user interaction:", error);
+                        });
+                    }
                 });
             }
         }
@@ -193,7 +204,6 @@
             foundStations.forEach((station, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'ep-btn';
-                // ถ้ามี info ให้ใช้ info (เช่น ตอนที่ 1) ถ้าไม่มีให้รันเลข EP ตาม index
                 btn.innerText = station.info ? station.info.replace('ตอนที่', 'EP') : 'EP ' + (index + 1);
                 
                 btn.onclick = function() {
