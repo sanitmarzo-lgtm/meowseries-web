@@ -95,7 +95,7 @@
     <div class="player-container">
         <div class="video-box" id="infoBox">
             <h3>เลือกตอนที่ต้องการรับชมจากเมนูด้านขวา</h3>
-            <p style="color: #aaa; font-size: 14px;">ระบบจะเปิดสตรีมมิ่งเล่นไฟล์ในแท็บใหม่เพื่อป้องกันปัญหาจอดำและข้อผิดพลาดจากเว็บต้นทาง</p>
+            <p style="color: #aaa; font-size: 14px;">ระบบจะสร้างลิงก์รับชมผ่าน Player เสถียรให้ทันที</p>
         </div>
 
         <div class="playlist-box">
@@ -135,30 +135,31 @@
                         btn.className = 'ep-btn';
                         btn.innerText = epItem.name || `EP ${index + 1}`;
                         
+                        // สร้างลิงก์ Player สำเร็จรูปผ่าน hlsjs player หรือส่งเข้าเว็บเล่นไฟล์ hls ออนไลน์เพื่อความชัวร์
+                        // หรือเปิดผ่าน Player กลางที่รันไฟล์ m3u8 ได้ทันที
+                        const playerUrl = `https://vidstack.io/player?src=${encodeURIComponent(epItem.url)}`;
+
                         btn.onclick = () => {
                             document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
                             btn.classList.add('active');
                             
-                            // เปลี่ยนข้อความฝั่งซ้ายพร้อมปุ่มกดเปิดดู
                             infoBox.innerHTML = `
                                 <h3 style="margin-bottom: 5px;">กำลังเล่น: ${epItem.name || 'EP ' + (index + 1)}</h3>
-                                <p style="color: #888; font-size: 13px; margin-bottom: 15px;">หากหน้าจอไม่เด้งอัตโนมัติ สามารถกดปุ่มด้านล่างเพื่อรับชมได้ทันที</p>
-                                <a href="${epItem.url}" target="_blank" class="open-link-btn">▶ คลิกเพื่อเปิดดูสตรีมตอนนี้</a>
+                                <p style="color: #888; font-size: 13px; margin-bottom: 15px;">คลิกปุ่มด้านล่างเพื่อเปิดหน้าต่างเล่นวิดีโอแบบคมชัด HD</p>
+                                <a href="${playerUrl}" target="_blank" class="open-link-btn">▶ เปิดเครื่องเล่นวิดีโอ (Player)</a>
                             `;
 
-                            // สั่งเปิดแท็บใหม่อัตโนมัติทันทีที่คลิก
-                            window.open(epItem.url, '_blank');
+                            window.open(playerUrl, '_blank');
                         };
 
                         epContainer.appendChild(btn);
 
-                        // เลือกตอนแรกไว้ให้พร้อมกด
                         if (index === 0) {
                             btn.classList.add('active');
                             infoBox.innerHTML = `
                                 <h3 style="margin-bottom: 5px;">พร้อมรับชม: ${epItem.name || 'EP 1'}</h3>
                                 <p style="color: #888; font-size: 13px; margin-bottom: 15px;">คลิกปุ่มด้านล่างเพื่อเริ่มรับชม</p>
-                                <a href="${epItem.url}" target="_blank" class="open-link-btn">▶ คลิกเพื่อเปิดดูสตรีมตอนนี้</a>
+                                <a href="${playerUrl}" target="_blank" class="open-link-btn">▶ เปิดเครื่องเล่นวิดีโอ (Player)</a>
                             `;
                         }
                     });
