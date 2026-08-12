@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEOWSERIES - เล่นวิดีโอ</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
             background-color: #111;
@@ -37,10 +36,10 @@
             align-items: center;
             justify-content: center;
         }
-        video {
+        iframe {
             width: 100%;
             height: 100%;
-            outline: none;
+            border: none;
         }
         .playlist-box {
             flex: 1;
@@ -81,8 +80,8 @@
     <h2 id="title">กำลังโหลดข้อมูล...</h2>
 
     <div class="player-container">
-        <div class="video-box">
-            <video id="videoPlayer" controls playsinline></video>
+        <div class="video-box" id="videoBox">
+            <p style="color: #777;">กำลังโหลดเครื่องเล่น...</p>
         </div>
 
         <div class="playlist-box">
@@ -102,9 +101,8 @@
             titleElement.innerText = targetTitle;
         }
 
-        const video = document.getElementById('videoPlayer');
+        const videoBox = document.getElementById('videoBox');
         const epContainer = document.getElementById('episodesContainer');
-        let currentHls = null; // ตัวแปรสำหรับจัดการ HLS instance
 
         // โหลดข้อมูลจากไฟล์ JSON หลัก
         fetch('series.json')
@@ -127,7 +125,9 @@
                         btn.onclick = () => {
                             document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
                             btn.classList.add('active');
-                            playVideo(epItem); // ส่ง object ของตอนนี้เข้าไปทั้งหมด เพื่อเอา url และ referer
+                            
+                            // ใช้ iframe โหลดลิงก์ตรงๆ ปัญหาเรื่อง Refused to set unsafe header จะหายไปทันที
+                            videoBox.innerHTML = `<iframe src="${epItem.url}" allowfullscreen="true" scrolling="no" frameborder="0" allow="autoplay; fullscreen"></iframe>`;
                         };
 
                         epContainer.appendChild(btn);
@@ -144,40 +144,6 @@
                 console.error("Load JSON Error:", err);
                 epContainer.innerHTML = '<p style="color: #e50914; font-size: 14px;">เกิดข้อผิดพลาดในการโหลดไฟล์ JSON</p>';
             });
-
-        function playVideo(epData) {
-            const videoUrl = epData.url;
-            const refUrl = epData.referer || "https://main.24playerhd.com/";
-
-            // ล้าง HLS ตัวเก่าทิ้งก่อนเปิดตอนใหม่
-            if (currentHls) {
-                currentHls.destroy();
-                currentHls = null;
-            }
-
-            if (Hls.isSupported()) {
-                currentHls = new Hls({
-                    xhrSetup: function(xhr, url) {
-                        xhr.setRequestHeader('Referer', refUrl);
-                    }
-                });
-                currentHls.loadSource(videoUrl);
-                currentHls.attachMedia(video);
-                currentHls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(e => console.log("Auto-play blocked:", e));
-                });
-                currentHls.on(Hls.Events.ERROR, function(event, data) {
-                    console.error("HLS Error details:", data);
-                });
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // สำหรับ Safari บน iOS
-                video.src = videoUrl;
-                video.play().catch(e => console.log("Safari play error:", e));
-            } else {
-                video.src = videoUrl;
-                video.play();
-            }
-        }
     </script>
 </body>
 </html>
