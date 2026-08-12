@@ -88,8 +88,8 @@
 
     <div class="player-container">
         <div class="video-box">
-            <!-- แท็กวิดีโอหลักสำหรับเล่นสตรีม -->
-            <video id="videoPlayer" controls autoplay></video>
+            <!-- เอา autoplay ออก เพื่อป้องกันการแย่งโหลดและตัดปัญหา AbortError -->
+            <video id="videoPlayer" controls></video>
         </div>
 
         <div class="playlist-box">
@@ -113,7 +113,6 @@
         const epContainer = document.getElementById('episodesContainer');
         let currentHls = null;
 
-        // ฟังก์ชันสำหรับเล่นวิดีโอ (ทำงานเฉพาะตอนที่ผู้ใช้คลิกเลือกตอนเท่านั้น)
         function playStream(url) {
             if (currentHls) {
                 currentHls.destroy();
@@ -155,15 +154,14 @@
                         btn.onclick = () => {
                             document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
                             btn.classList.add('active');
-                            playStream(epItem.url); // เล่นทันทีเมื่อผู้ใช้คลิก
+                            playStream(epItem.url);
                         };
 
                         epContainer.appendChild(btn);
 
-                        // ถ้าเป็นตอนที่ 1 ให้เซ็ตสถานะ Active ที่ปุ่มไว้ แต่ยังไม่สั่งโหลดซ้อนทับอัตโนมัติ เพื่อป้องกัน AbortError
+                        // โหลดตอนแรกเตรียมไว้เงียบๆ โดยไม่สั่งเล่นอัตโนมัติ
                         if (index === 0) {
                             btn.classList.add('active');
-                            // โหลดซอร์สตอนแรกเตรียมไว้แบบนิ่งๆ โดยไม่เรียก play() ซ้ำซ้อน
                             if (Hls.isSupported()) {
                                 currentHls = new Hls();
                                 currentHls.loadSource(epItem.url);
