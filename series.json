@@ -1,4 +1,4 @@
-const playlistData = {
+{
   "name": "ซีรีย์ พากย์ไทย",
   "author": "ซีรีย์อัพเพิ้มใหม่ จาก บน ลง ล่าง",
   "groups": [
@@ -88,7 +88,7 @@ const playlistData = {
           "image": "https://s359.kapook.com/pagebuilder/ce1f0901-1693-42c2-9bab-d7210e014f96.jpg",
           "info": "เสียง : ไทย ",
           "url": "https://main.24playerhd.com/newplaylist/868f1ad63e7775131ce3b1f0/868f1ad63e7775131ce3b1f0.m3u8",
-          "referer": "https://main.24playerhd.com/"
+          "referer": "https://main.24.playerhd.com/"
         }
       ]
     },
@@ -279,4 +279,4 @@ const playlistData = {
       ]
     }
   ]
-};
+}
