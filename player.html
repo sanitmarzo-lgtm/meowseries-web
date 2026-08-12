@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MeowSeries Player</title>
-    <!-- นำเข้า Hls.js -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
@@ -36,18 +35,20 @@
     </div>
 
     <script>
-        // ดึง URL ของวิดีโอจาก Query Parameter ชื่อ ?url= หรือ ?stream=
         const urlParams = new URLSearchParams(window.location.search);
-        let streamUrl = urlParams.get('url') || urlParams.get('stream');
+        // รองรับทั้งพารามิเตอร์ url, stream หรือถ้าคุณส่งลิงก์ตรงๆ มาในรูปแบบอื่น
+        let streamUrl = urlParams.get('url') || urlParams.get('stream') || urlParams.get('src');
 
+        // หากยังไม่เจอ ลองเช็กดูว่าในหน้าเว็บหลักของคุณส่งลิงก์มาแบบไหน 
+        // หรือถ้าต้องการระบุลิงก์สำรองทดสอบตรงนี้ชั่วคราว สามารถใส่แทนค่าว่างด้านล่างได้ครับ
         if (!streamUrl) {
-            alert('ไม่พบลิงก์วิดีโอสำหรับเล่น');
+            // ตัวอย่าง: ถ้าไม่มีพารามิเตอร์ส่งมา ให้ดึงจากช่องอื่น หรือแจ้งเตือน
+            alert('ไม่พบลิงก์วิดีโอสำหรับเล่น (โปรดตรวจสอบการส่ง URL จากหน้าหลัก)');
         } else {
             var video = document.getElementById('video');
 
             if (Hls.isSupported()) {
                 var hls = new Hls({
-                    // ฟังก์ชันดักจับทุก Request ที่ Hls.js สร้างขึ้นเพื่อดึงไฟล์ย่อย (.ts หรือ .m3u8)
                     xhrSetup: function (xhr, url) {
                         if (!url.includes('meow-stream-proxy.sarawutocha.workers.dev')) {
                             let absoluteUrl = url;
@@ -62,7 +63,6 @@
                     }
                 });
                 
-                // แปลง streamUrl หลักให้อยู่ในรูป Absolute URL ก่อนส่งเข้า Proxy
                 let finalStreamUrl = streamUrl;
                 if (streamUrl.startsWith('/')) {
                     finalStreamUrl = 'https://m35.999play4.com' + streamUrl;
@@ -78,7 +78,6 @@
                     });
                 });
 
-                // ระบบจัดการ Error ป้องกันวิดีโอหลุดหรือโหลดค้าง
                 hls.on(Hls.Events.ERROR, function (event, data) {
                     if (data.fatal) {
                         console.error('HLS Fatal Error:', data.type, data.details);
@@ -97,7 +96,6 @@
                 });
 
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // สำหรับ Safari หรือเบราว์เซอร์ที่รองรับ HLS Native
                 video.src = streamUrl;
                 video.addEventListener('loadedmetadata', function() {
                     video.play();
