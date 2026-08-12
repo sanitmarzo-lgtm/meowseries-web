@@ -128,7 +128,6 @@
         <input type="text" id="searchInput" class="search-box" placeholder="ค้นหาชื่อซีรีส์ในหน้านี้..." oninput="handleSearch()">
 
         <nav>
-            <!-- แต่ละปุ่มจะชี้ไปดึงไฟล์ JSON ที่แยกไว้คนละไฟล์ -->
             <button class="active" onclick="loadCategory('data.json', 'หน้าแรก / อัปเดตล่าสุด', event)">หน้าแรก</button>
             <button onclick="loadCategory('vertical.json', 'หนังซีรีส์จอตั้ง', event)">หนังซีรีส์จอตั้ง</button>
             <button onclick="loadCategory('cinema.json', 'หนังชนโรง', event)">หนังชนโรง</button>
@@ -146,16 +145,14 @@
         </div>
     </div>
 
-    <!-- สคริปต์สลับไฟล์ JSON มาแสดง -->
+    <!-- สคริปต์รองรับทั้ง groups และ stations -->
     <script>
-        let currentStations = [];
+        let allSeries = [];
 
-        // โหลดข้อมูลเริ่มต้นตอนเข้าเว็บครั้งแรก
         window.onload = () => {
             loadCategory('data.json', 'หน้าแรก / อัปเดตล่าสุด');
         };
 
-        // ฟังก์ชันโหลดข้อมูลจากไฟล์ JSON ที่เลือก
         function loadCategory(jsonFile, titleText, event) {
             if (event) {
                 document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
@@ -173,8 +170,33 @@
                     return response.json();
                 })
                 .then(data => {
-                    currentStations = data.stations || [];
-                    displaySeries(currentStations);
+                    let processedItems = [];
+
+                    // รองรับโครงสร้างแบบ groups (มีหลายตอนย่อยด้านใน)
+                    if (data.groups && Array.isArray(data.groups)) {
+                        data.groups.forEach(group => {
+                            processedItems.push({
+                                name: group.name,
+                                image: group.image,
+                                info: "มี " + (group.stations ? group.stations.length : 0) + " ตอน",
+                                stations: group.stations || []
+                            });
+                        });
+                    } 
+                    // รองรับโครงสร้างแบบ stations (แบบเดิมทีละเรื่อง)
+                    else if (data.stations && Array.isArray(data.stations)) {
+                        data.stations.forEach(station => {
+                            processedItems.push({
+                                name: station.name,
+                                image: station.image,
+                                info: station.info || "ไม่มีข้อมูล",
+                                stations: [station]
+                            });
+                        });
+                    }
+
+                    allSeries = processedItems;
+                    displaySeries(allSeries);
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -182,17 +204,16 @@
                 });
         }
 
-        // ฟังก์ชันวาดการ์ดแสดงผล
-        function displaySeries(stationsToDisplay) {
+        function displaySeries(itemsToDisplay) {
             const grid = document.getElementById('series-grid');
             grid.innerHTML = '';
 
-            if (stationsToDisplay.length === 0) {
+            if (itemsToDisplay.length === 0) {
                 grid.innerHTML = '<div class="no-result">ไม่มีรายการในหมวดหมู่นี้</div>';
                 return;
             }
 
-            stationsToDisplay.forEach(item => {
+            itemsToDisplay.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 
@@ -205,19 +226,17 @@
                 `;
                 
                 card.onclick = () => {
-    // ส่งข้อมูลซีรีส์ทั้งก้อนไปหน้า player
-    const stringData = encodeURIComponent(JSON.stringify(item));
-    window.location.href = `player.html?title=${encodeURIComponent(item.name)}&data=${stringData}`;
-};
+                    const stringData = encodeURIComponent(JSON.stringify(item));
+                    window.location.href = `player.html?title=${encodeURIComponent(item.name)}&data=${stringData}`;
+                };
                 
                 grid.appendChild(card);
             });
         }
 
-        // ฟังก์ชันค้นหาเฉพาะในหมวดที่เปิดอยู่ปัจจุบัน
         function handleSearch() {
             const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
-            const filtered = currentStations.filter(item => {
+            const filtered = allSeries.filter(item => {
                 const name = item.name ? item.name.toLowerCase() : '';
                 const info = item.info ? item.info.toLowerCase() : '';
                 return name.includes(keyword) || info.includes(keyword);
