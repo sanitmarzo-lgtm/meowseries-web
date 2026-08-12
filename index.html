@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meowseries - Netflix Style</title>
-    <!--บรรทัดนี้สำคัญมาก ต้องแน่ใจว่าชื่อไฟล์ CSS ตรงกัน -->
-    <link rel="stylesheet" href="style.css"> 
+    <title>Meowseries</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -24,8 +23,8 @@
     <!-- Banner / Hero Section -->
     <section class="banner" style="background: linear-gradient(to top, #141414, transparent), url('https://picsum.photos/1920/1080') center/cover;">
         <div class="banner-content">
-            <h2 class="banner-title">ชื่อซีรีส์แนะนำ</h2>
-            <p class="banner-desc">เรื่องย่อสั้นๆ ของซีรีส์ไฮไลท์ประจำสัปดาห์ สนุกสุดเหวี่ยงและน่าติดตาม...</p>
+            <h2 class="banner-title">ซีรีส์แนะนำ</h2>
+            <p class="banner-desc">อัปเดตซีรีส์ใหม่ล่าสุด สนุกสุดเหวี่ยงและน่าติดตาม...</p>
             <div class="banner-buttons">
                 <button class="btn play-btn">▶ เล่น</button>
                 <button class="btn info-btn">ℹ ข้อมูลเพิ่มเติม</button>
@@ -33,18 +32,40 @@
         </div>
     </section>
 
-    <!-- Row Section (รายการวิดีโอ) -->
+    <!-- Row Section (ที่ดึงข้อมูลจาก data.json) -->
     <section class="row">
-        <h2>ซีรีส์มาใหม่</h2>
-        <div class="row-posters">
-            <!-- ตัวอย่าง Card วิดีโอ -->
-            <div class="poster" style="background-image: url('https://picsum.photos/300/450?random=1');"></div>
-            <div class="poster" style="background-image: url('https://picsum.photos/300/450?random=2');"></div>
-            <div class="poster" style="background-image: url('https://picsum.photos/300/450?random=3');"></div>
-            <div class="poster" style="background-image: url('https://picsum.photos/300/450?random=4');"></div>
-            <div class="poster" style="background-image: url('https://picsum.photos/300/450?random=5');"></div>
+        <h2>อัปเดตล่าสุด</h2>
+        <div class="row-posters" id="poster-container">
+            <!-- ข้อมูลจะถูกโหลดจาก data.json มาใส่ตรงนี้ -->
         </div>
     </section>
+
+    <script>
+        // ฟังก์ชันดึงข้อมูลจากไฟล์ data.json
+        fetch('data.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('ไม่พบไฟล์ data.json');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const container = document.getElementById('poster-container');
+                container.innerHTML = ''; // เคลียร์ของเก่า
+                
+                data.forEach(item => {
+                    const poster = document.createElement('div');
+                    poster.className = 'poster';
+                    poster.style.backgroundImage = `url('${item.image}')`;
+                    poster.onclick = () => window.open(item.link, '_blank');
+                    container.appendChild(poster);
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('poster-container').innerHTML = '<p style="padding: 20px;">กรุณาอัปโหลดไฟล์ data.json ก่อนครับ</p>';
+            });
+    </script>
 
 </body>
 </html>
