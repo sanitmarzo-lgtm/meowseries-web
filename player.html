@@ -118,14 +118,40 @@
                 currentHls = null;
             }
 
+            // ใช้ลิงก์ตรงต้นทาง (Direct URL)
             if (Hls.isSupported()) {
-                currentHls = new Hls();
+                currentHls = new Hls({
+                    debug: false,
+                    // กำหนดค่าเผื่อกรณีเซิร์ฟเวอร์ปลายทางมีปัญหาเรื่อง networkเล็กน้อย
+                    xhrSetup: function (xhr, url) {
+                        xhr.withCredentials = false; // ปิดการส่ง cookie ข้ามเว็บเพื่อลดปัญหา CORS
+                    }
+                });
                 currentHls.loadSource(url);
                 currentHls.attachMedia(video);
                 currentHls.on(Hls.Events.MANIFEST_PARSED, () => {
                     video.play().catch(e => console.log("Play prevented:", e));
                 });
+                currentHls.on(Hls.Events.ERROR, function (event, data) {
+                    if (data.fatal) {
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                console.log("เกิดปัญหา Network Error พยายามกู้คืน...");
+                                currentHls.startLoad();
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                console.log("เกิดปัญหา Media Error พยายามกู้คืน...");
+                                currentHls.recoverMediaError();
+                                break;
+                            default:
+                                console.error("ไม่สามารถเล่นสตรีมนี้ได้:", data);
+                                currentHls.destroy();
+                                break;
+                        }
+                    }
+                });
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // สำหรับ Safari หรือเบราว์เซอร์ที่รองรับ HLS ในตัว
                 video.src = url;
                 video.addEventListener('loadedmetadata', () => {
                     video.play().catch(e => console.log("Play prevented:", e));
@@ -150,7 +176,6 @@
                         btn.className = 'ep-btn';
                         btn.innerText = epItem.name || `EP ${index + 1}`;
                         
-                        // ไฮไลต์ปุ่มแรกไว้เฉยๆ แต่ยังไม่สั่งโหลดหรือเล่นอะไรจนกว่าจะกด
                         if (index === 0) {
                             btn.classList.add('active');
                         }
