@@ -2,29 +2,48 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>Meowseries Player</title>
-    <!-- ใช้ HLS.js เพื่อให้เล่น .m3u8 บนเบราว์เซอร์ได้ -->
+    <title>MEOWSERIES - Player</title>
+    <!-- ตัวช่วยเล่นไฟล์ .m3u8 (Hls.js) -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        body { background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        video { width: 90%; max-width: 900px; }
+        body { background: #000; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: sans-serif; }
+        h2 { margin-bottom: 15px; font-size: 20px; }
+        video { width: 90%; max-width: 900px; border-radius: 8px; background: #111; }
     </style>
 </head>
 <body>
-    <video id="video" controls autoplay></video>
+    <h2 id="title">กำลังโหลด...</h2>
+    <video id="videoPlayer" controls autoplay></video>
 
     <script>
-        const video = document.getElementById('video');
-        // รับค่า URL จาก parameter ที่ส่งมา (เช่น player.html?url=...)
+        // ดึงชื่อเรื่องและลิงก์ที่ส่งมาจากหน้าแรก
         const urlParams = new URLSearchParams(window.location.search);
-        const videoSrc = urlParams.get('url');
+        const videoUrl = urlParams.get('url');
+        const videoTitle = urlParams.get('title');
 
-        if (Hls.isSupported()) {
-            const hls = new Hls();
-            hls.loadSource(videoSrc);
-            hls.attachMedia(video);
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = videoSrc;
+        if (videoTitle) {
+            document.getElementById('title').innerText = videoTitle;
+        }
+
+        const video = document.getElementById('videoPlayer');
+
+        if (videoUrl) {
+            // ใช้ Proxy ช่วยเพื่อไม่ให้ติดบล็อก CORS ของ Rumble
+            const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(videoUrl);
+
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(proxyUrl);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play();
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = proxyUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play();
+                });
+            }
         }
     </script>
 </body>
