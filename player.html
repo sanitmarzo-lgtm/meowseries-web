@@ -3,19 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>MEOWSERIES - Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        body { background: #000; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: sans-serif; }
-        h2 { margin-bottom: 15px; font-size: 20px; }
-        video { width: 90%; max-width: 900px; border-radius: 8px; background: #111; }
+        body { background: #000; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; margin: 0; font-family: sans-serif; padding: 20px; }
+        h2 { margin-bottom: 15px; font-size: 20px; text-align: center; }
+        .player-container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; width: 100%; max-width: 1200px; }
+        video { width: 100%; max-width: 800px; border-radius: 8px; background: #111; }
+        .episode-list { background: #1a1a1a; padding: 15px; border-radius: 8px; width: 250px; max-height: 450px; overflow-y: auto; }
+        .episode-list h3 { margin-top: 0; font-size: 16px; border-bottom: 1px solid #333; padding-bottom: 8px; }
+        .ep-btn { display: block; width: 100%; background: #222; color: #fff; border: 1px solid #444; padding: 10px; margin-bottom: 8px; text-align: left; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
+        .ep-btn:hover, .ep-btn.active { background: #e50914; border-color: #e50914; }
     </style>
 </head>
 <body>
     <h2 id="title">กำลังโหลด...</h2>
-    <video id="videoPlayer" controls autoplay></video>
+    
+    <div class="player-container">
+        <!-- ตัวเล่นวิดีโอหลัก -->
+        <video id="videoPlayer" controls autoplay></video>
+
+        <!-- กล่องแสดงรายชื่อตอน -->
+        <div class="episode-list">
+            <h3>เลือกตอน</h3>
+            <div id="episodesContainer"></div>
+        </div>
+    </div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const videoUrl = urlParams.get('url');
+        const encodedData = urlParams.get('data'); // รับข้อมูลซีรีส์ทั้งก้อนที่ส่งมา
         const videoTitle = urlParams.get('title');
 
         if (videoTitle) {
@@ -23,14 +39,53 @@
         }
 
         const video = document.getElementById('videoPlayer');
-        
-        // ทดลองเล่นตรงๆ ไม่ผ่าน Proxy 
-        // ถ้าเบราว์เซอร์ยอมให้โหลดข้ามโดเมน วิธีนี้จะเล่นได้ทันที
-        if (videoUrl) {
-            video.src = videoUrl;
-            video.play().catch(e => {
-                console.log("Auto-play blocked or source issue, user needs to click play.");
-            });
+        const epContainer = document.getElementById('episodesContainer');
+
+        if (encodedData) {
+            // แปลงข้อมูลซีรีส์กลับมาเป็น Object
+            const seriesData = JSON.parse(decodeURIComponent(encodedData));
+
+            if (seriesData.episodes && seriesData.episodes.length > 0) {
+                // สร้างปุ่มเลือกตอนทั้งหมด
+                seriesData.episodes.forEach((epItem, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'ep-btn';
+                    btn.innerText = epItem.ep;
+                    
+                    btn.onclick = () => {
+                        // เปลี่ยนสีปุ่มที่กำลังดูอยู่
+                        document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        
+                        // สั่งเล่นวิดีโอของตอนนี้
+                        playVideo(epItem.url);
+                    };
+
+                    epContainer.appendChild(btn);
+
+                    // เล่นตอนที่ 1 อัตโนมัติเมื่อเปิดหน้าเว็บ
+                    if (index === 0) {
+                        btn.click();
+                    }
+                });
+            }
+        }
+
+        function playVideo(videoUrl) {
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(videoUrl);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play();
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = videoUrl;
+                video.play();
+            } else {
+                video.src = videoUrl;
+                video.play();
+            }
         }
     </script>
 </body>
