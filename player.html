@@ -104,14 +104,14 @@
 
         const video = document.getElementById('videoPlayer');
         const epContainer = document.getElementById('episodesContainer');
+        let currentHls = null; // ตัวแปรสำหรับจัดการ HLS instance
 
-        // โหลดข้อมูลจากไฟล์ JSON หลัก (ตัวอย่างใช้ series.json ลองเปลี่ยนชื่อไฟล์ตามหมวดได้ครับ)
+        // โหลดข้อมูลจากไฟล์ JSON หลัก
         fetch('series.json')
             .then(response => response.json())
             .then(data => {
                 let foundGroup = null;
 
-                // ค้นหาซีรีส์ที่ชื่อตรงกับที่คลิกเข้ามา จาก groups
                 if (data.groups) {
                     foundGroup = data.groups.find(g => g.name === targetTitle);
                 }
@@ -127,13 +127,13 @@
                         btn.onclick = () => {
                             document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
                             btn.classList.add('active');
-                            playVideo(epItem.url);
+                            playVideo(epItem); // ส่ง object ของตอนนี้เข้าไปทั้งหมด เพื่อเอา url และ referer
                         };
 
                         epContainer.appendChild(btn);
 
                         if (index === 0) {
-                            btn.click();
+                            btn.click(); // เล่นตอนแรกอัตโนมัติ
                         }
                     });
                 } else {
@@ -145,35 +145,39 @@
                 epContainer.innerHTML = '<p style="color: #e50914; font-size: 14px;">เกิดข้อผิดพลาดในการโหลดไฟล์ JSON</p>';
             });
 
-        function playVideo(videoUrl) {
-    if (!videoUrl) return;
+        function playVideo(epData) {
+            const videoUrl = epData.url;
+            const refUrl = epData.referer || "https://main.24playerhd.com/";
 
-    // ล้างตัวเล่นเก่าก่อนถ้ามี
-    if (window.hls) {
-        window.hls.destroy();
-    }
+            // ล้าง HLS ตัวเก่าทิ้งก่อนเปิดตอนใหม่
+            if (currentHls) {
+                currentHls.destroy();
+                currentHls = null;
+            }
 
-    // กำหนด config เพื่อส่งค่า referer ตามที่อยู่ใน JSON
-    // (หมายเหตุ: ใน JSON คุณมีค่า "referer" เตรียมไว้ให้แล้ว)
-    const hlsConfig = {
-        xhrSetup: function (xhr, url) {
-            // โค้ดนี้จะพยายามส่งค่า referer ถ้าเบราว์เซอร์อนุญาต
-            xhr.setRequestHeader('Referer', 'https://main.24playerhd.com/');
+            if (Hls.isSupported()) {
+                currentHls = new Hls({
+                    xhrSetup: function(xhr, url) {
+                        xhr.setRequestHeader('Referer', refUrl);
+                    }
+                });
+                currentHls.loadSource(videoUrl);
+                currentHls.attachMedia(video);
+                currentHls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play().catch(e => console.log("Auto-play blocked:", e));
+                });
+                currentHls.on(Hls.Events.ERROR, function(event, data) {
+                    console.error("HLS Error details:", data);
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // สำหรับ Safari บน iOS
+                video.src = videoUrl;
+                video.play().catch(e => console.log("Safari play error:", e));
+            } else {
+                video.src = videoUrl;
+                video.play();
+            }
         }
-    };
-
-    if (Hls.isSupported()) {
-        window.hls = new Hls(hlsConfig);
-        window.hls.loadSource(videoUrl);
-        window.hls.attachMedia(video);
-        window.hls.on(Hls.Events.MANIFEST_PARSED, function() {
-            video.play().catch(e => console.log("กด Play เอง:", e));
-        });
-    } else {
-        video.src = videoUrl;
-        video.play();
-    }
-}
     </script>
 </body>
 </html>
