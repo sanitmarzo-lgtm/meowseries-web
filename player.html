@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEOWSERIES - เล่นวิดีโอ</title>
-    <!-- โหลด Clappr Player จาก CDN -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
+    <!-- โหลด Hls.js -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
             background-color: #111;
@@ -38,7 +38,7 @@
             align-items: center;
             justify-content: center;
         }
-        #player-wrapper {
+        video {
             width: 100%;
             height: 100%;
         }
@@ -82,7 +82,7 @@
 
     <div class="player-container">
         <div class="video-box">
-            <div id="player-wrapper"></div>
+            <video id="videoPlayer" controls playsinline></video>
         </div>
 
         <div class="playlist-box">
@@ -103,26 +103,37 @@
         }
 
         const epContainer = document.getElementById('episodesContainer');
-        let player = null;
+        const video = document.getElementById('videoPlayer');
+        let hls = null;
 
-        function loadPlayer(videoUrl) {
-            // ทำลายตัวเล่นเก่าทิ้งก่อนสร้างใหม่
-            if (player) {
-                player.destroy();
+        function playVideo(videoUrl) {
+            if (hls) {
+                hls.destroy();
             }
 
-            // สร้าง Clappr Player ใหม่
-            player = new Clappr.Player({
-                source: videoUrl,
-                parentId: "#player-wrapper",
-                width: '100%',
-                height: '100%',
-                autoPlay: false, // ปิดการเล่นอัตโนมัติเพื่อป้องกัน Error จากเบราว์เซอร์
-                mute: false
-            });
+            if (Hls.isSupported()) {
+                hls = new Hls({
+                    // ตั้งค่าให้ Hls.js ช่วยจัดการโหลดข้ามโดเมนย่อยที่เปลี่ยนไปในแต่ละตอน
+                    xhrSetup: function (xhr, url) {
+                        // ปล่อยให้เบราว์เซอร์จัดการ Credential ตามปกติ
+                    }
+                });
+                hls.loadSource(videoUrl);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play().catch(e => console.log("Autoplay blocked, waiting for click"));
+                });
+                hls.on(Hls.Events.ERROR, function(event, data) {
+                    console.error("HLS Stream Error:", data);
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = videoUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play();
+                });
+            }
         }
 
-        // โหลดข้อมูลจากไฟล์ JSON หลัก
         fetch('series.json')
             .then(response => response.json())
             .then(data => {
@@ -143,15 +154,14 @@
                         btn.onclick = () => {
                             document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
                             btn.classList.add('active');
-                            loadPlayer(epItem.url);
+                            playVideo(epItem.url);
                         };
 
                         epContainer.appendChild(btn);
 
-                        // โหลดตอนแรกเตรียมไว้ แต่ไม่สั่งเล่นอัตโนมัติเพื่อเลี่ยง Error
                         if (index === 0) {
                             btn.classList.add('active');
-                            loadPlayer(epItem.url);
+                            playVideo(epItem.url);
                         }
                     });
                 } else {
