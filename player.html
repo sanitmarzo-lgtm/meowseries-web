@@ -111,10 +111,10 @@
 
         const video = document.getElementById('videoPlayer');
         const epContainer = document.getElementById('episodesContainer');
-        let currentHls = null; // ตัวแปรเก็บสถานะ HLS เพื่อทำลายและสร้างใหม่เวลาเปลี่ยนตอนอย่างสะอาด
+        let currentHls = null;
 
-        function playStream(url) {
-            // หากมี HLS ค้างอยู่ ให้ทำลายทิ้งก่อนเพื่อป้องกันปัญหาชนกัน
+        // ฟังก์ชันสำหรับโหลดและเล่นวิดีโอ (ใช้เมื่อมีการคลิกปุ่มเลือกตอนเท่านั้น)
+        function playStream(url, shouldPlay = true) {
             if (currentHls) {
                 currentHls.destroy();
                 currentHls = null;
@@ -124,14 +124,18 @@
                 currentHls = new Hls();
                 currentHls.loadSource(url);
                 currentHls.attachMedia(video);
-                currentHls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    video.play().catch(e => console.log("User interaction required to play:", e));
-                });
+                if (shouldPlay) {
+                    currentHls.on(Hls.Events.MANIFEST_PARSED, () => {
+                        video.play().catch(e => console.log("Play prevented:", e));
+                    });
+                }
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = url;
-                video.addEventListener('loadedmetadata', () => {
-                    video.play().catch(e => console.log("User interaction required to play:", e));
-                }, { once: true });
+                if (shouldPlay) {
+                    video.addEventListener('loadedmetadata', () => {
+                        video.play().catch(e => console.log("Play prevented:", e));
+                    }, { once: true });
+                }
             }
         }
 
@@ -155,26 +159,19 @@
                         btn.onclick = () => {
                             document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
                             btn.classList.add('active');
-                            playStream(epItem.url);
+                            playStream(epItem.url, true); // สั่งเล่นเมื่อผู้ใช้กดคลิกปุ่ม
                         };
 
                         epContainer.appendChild(btn);
                     });
 
-                    // โหลดตอนแรกเตรียมไว้โดยใช้ปุ่มแรก (เซ็ต Active และโหลดซอร์สครั้งเดียวจบ ไม่ซ้ำซ้อน)
+                    // ตั้งค่าปุ่มแรกและโหลดสตรีมเตรียมไว้แบบ "ไม่สั่งเล่นอัตโนมัติ" (ป้องกัน AbortError 100%)
                     const firstBtn = epContainer.querySelector('.ep-btn');
                     if (firstBtn) {
                         firstBtn.classList.add('active');
                     }
                     
-                    // โหลดซอร์สตอนแรกแบบนิ่งๆ ไม่บังคับสั่ง play() ตอนเปิดหน้าเว็บทันที
-                    if (Hls.isSupported()) {
-                        currentHls = new Hls();
-                        currentHls.loadSource(foundGroup.stations[0].url);
-                        currentHls.attachMedia(video);
-                    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                        video.src = foundGroup.stations[0].url;
-                    }
+                    playStream(foundGroup.stations[0].url, false);
 
                 } else {
                     epContainer.innerHTML = '<p style="color: #e50914; font-size: 14px;">ไม่พบข้อมูลตอนของซีรีส์นี้</p>';
