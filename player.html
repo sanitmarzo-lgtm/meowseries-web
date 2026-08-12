@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEOWSERIES - เล่นวิดีโอ</title>
+    <!-- โหลดไลบรารี Hls.js สำหรับเล่นไฟล์ .m3u8 -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
             background-color: #111;
@@ -37,7 +39,14 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 20px;
+            position: relative;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            max-height: calc(100vh - 120px);
+            background: #000;
+            outline: none;
         }
         .playlist-box {
             flex: 1;
@@ -71,21 +80,6 @@
             background: #e50914;
             border-color: #e50914;
         }
-        .open-link-btn {
-            background: #e50914;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            text-decoration: none;
-            margin-top: 15px;
-            display: inline-block;
-        }
-        .open-link-btn:hover {
-            background: #b20710;
-        }
     </style>
 </head>
 <body>
@@ -93,9 +87,9 @@
     <h2 id="title">กำลังโหลดข้อมูล...</h2>
 
     <div class="player-container">
-        <div class="video-box" id="infoBox">
-            <h3>เลือกตอนที่ต้องการรับชมจากเมนูด้านขวา</h3>
-            <p style="color: #aaa; font-size: 14px;">ระบบจะสร้างลิงก์รับชมผ่าน Player เสถียรให้ทันที</p>
+        <div class="video-box">
+            <!-- แท็กวิดีโอหลักสำหรับเล่นสตรีม -->
+            <video id="videoPlayer" controls autoplay></video>
         </div>
 
         <div class="playlist-box">
@@ -115,8 +109,25 @@
             titleElement.innerText = targetTitle;
         }
 
+        const video = document.getElementById('videoPlayer');
         const epContainer = document.getElementById('episodesContainer');
-        const infoBox = document.getElementById('infoBox');
+
+        function playStream(url) {
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    video.play().catch(e => console.log("Auto-play blocked:", e));
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // สำหรับ Safari หรืออุปกรณ์ที่รองรับ HLS native
+                video.src = url;
+                video.addEventListener('loadedmetadata', () => {
+                    video.play();
+                });
+            }
+        }
 
         fetch('series.json')
             .then(response => response.json())
@@ -135,32 +146,18 @@
                         btn.className = 'ep-btn';
                         btn.innerText = epItem.name || `EP ${index + 1}`;
                         
-                        // สร้างลิงก์ Player สำเร็จรูปผ่าน hlsjs player หรือส่งเข้าเว็บเล่นไฟล์ hls ออนไลน์เพื่อความชัวร์
-                        // หรือเปิดผ่าน Player กลางที่รันไฟล์ m3u8 ได้ทันที
-                        const playerUrl = `https://vidstack.io/player?src=${encodeURIComponent(epItem.url)}`;
-
                         btn.onclick = () => {
                             document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
                             btn.classList.add('active');
-                            
-                            infoBox.innerHTML = `
-                                <h3 style="margin-bottom: 5px;">กำลังเล่น: ${epItem.name || 'EP ' + (index + 1)}</h3>
-                                <p style="color: #888; font-size: 13px; margin-bottom: 15px;">คลิกปุ่มด้านล่างเพื่อเปิดหน้าต่างเล่นวิดีโอแบบคมชัด HD</p>
-                                <a href="${playerUrl}" target="_blank" class="open-link-btn">▶ เปิดเครื่องเล่นวิดีโอ (Player)</a>
-                            `;
-
-                            window.open(playerUrl, '_blank');
+                            playStream(epItem.url);
                         };
 
                         epContainer.appendChild(btn);
 
+                        // เล่นตอนแรกให้อัตโนมัติทันทีที่เข้าหน้าเว็บ
                         if (index === 0) {
                             btn.classList.add('active');
-                            infoBox.innerHTML = `
-                                <h3 style="margin-bottom: 5px;">พร้อมรับชม: ${epItem.name || 'EP 1'}</h3>
-                                <p style="color: #888; font-size: 13px; margin-bottom: 15px;">คลิกปุ่มด้านล่างเพื่อเริ่มรับชม</p>
-                                <a href="${playerUrl}" target="_blank" class="open-link-btn">▶ เปิดเครื่องเล่นวิดีโอ (Player)</a>
-                            `;
+                            playStream(epItem.url);
                         }
                     });
                 } else {
