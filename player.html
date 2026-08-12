@@ -70,7 +70,8 @@
     <h1 id="movie-title">กำลังโหลดข้อมูล...</h1>
 
     <div class="player-container">
-        <video id="video" controls autoplay></video>
+        <!-- เอา autoplay ออก ตรงนี้เหลือแค่ controls -->
+        <video id="video" controls></video>
     </div>
 
     <div class="episode-section">
@@ -156,7 +157,6 @@
             }
         }
 
-        // ฟังก์ชันดึงข้อมูลจากไฟล์ JSON ทั้งหมดเพื่อค้นหาซีรีส์ที่ผู้ใช้คลิกเลือก
         async function loadEpisodes() {
             const jsonFiles = ['series.json', 'anime.json', 'cinema.json', 'vertical.json', 'adult.json'];
             let foundStations = [];
@@ -170,7 +170,6 @@
                     if (response.ok) {
                         let data = await response.json();
                         
-                        // ค้นหาแบบ groups
                         if (data.groups && Array.isArray(data.groups)) {
                             let match = data.groups.find(g => g.name === titleParam);
                             if (match && match.stations) {
@@ -178,7 +177,6 @@
                                 break;
                             }
                         }
-                        // ค้นหาแบบ stations เดี่ยวๆ
                         if (data.stations && Array.isArray(data.stations)) {
                             let match = data.stations.filter(s => s.name === titleParam);
                             if (match.length > 0) {
@@ -200,7 +198,6 @@
                 return;
             }
 
-            // สร้างปุ่มตอนจากข้อมูลจริงที่ดึงมา
             foundStations.forEach((station, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'ep-btn';
@@ -211,14 +208,12 @@
                 };
                 epListContainer.appendChild(btn);
 
-                // เล่นตอนแรกอัตโนมัติ
                 if (index === 0) {
                     playVideo(station.url, btn);
                 }
             });
         }
 
-        // เริ่มต้นทำงานเมื่อโหลดหน้าเว็บ
         loadEpisodes();
     </script>
 </body>
