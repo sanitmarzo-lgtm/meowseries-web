@@ -9,38 +9,92 @@
         body { background: #121212; color: #ffffff; font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; padding: 20px; }
         .container { max-width: 800px; margin: auto; }
         video { width: 100%; max-height: 450px; background: #000; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        h1 { margin-bottom: 10px; }
-        .group-section { margin-top: 20px; text-align: left; }
-        .group-title { color: #ff4757; border-bottom: 2px solid #ff4757; padding-bottom: 5px; margin-bottom: 10px; }
-        .episode-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-top: 10px; }
-        button { background: #2f3542; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 5px; transition: 0.3s; }
-        button:hover { background: #ff4757; }
+        
+        /* เมนูเลือกหมวดหมู่ (ไฟล์ JSON) */
+        .category-menu { display: flex; justify-content: center; gap: 8px; margin: 15px 0; flex-wrap: wrap; }
+        .cat-btn { background: #1e272e; color: #fff; border: 1px solid #485460; padding: 8px 16px; cursor: pointer; border-radius: 20px; transition: 0.3s; font-weight: bold; }
+        .cat-btn:hover, .cat-btn.active { background: #ff4757; border-color: #ff4757; }
+
+        h1 { margin-bottom: 10px; font-size: 24px; }
+        .group-section { margin-top: 25px; text-align: left; }
+        .group-title { color: #ff4757; border-bottom: 2px solid #ff4757; padding-bottom: 8px; margin-bottom: 12px; font-size: 18px; }
+        .episode-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+        
+        button.station-btn { 
+            background: #2f3542; 
+            color: #fff; 
+            border: none; 
+            padding: 8px; 
+            cursor: pointer; 
+            border-radius: 6px; 
+            transition: 0.3s; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            text-align: left;
+            width: 100%;
+        }
+        button.station-btn:hover { background: #ff4757; }
+        button.station-btn img { 
+            width: 40px; 
+            height: 60px; 
+            object-fit: cover; 
+            border-radius: 4px; 
+            flex-shrink: 0;
+        }
+        button.station-btn span {
+            font-size: 13px;
+            word-break: break-word;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1 id="main-title">Meowseries Player</h1>
+
+        <!-- แถบเมนูเลือกหมวดหมู่ตามไฟล์ JSON ของคุณ -->
+        <div class="category-menu">
+            <button class="cat-btn active" onclick="loadCategory('data.json', this)">🏠 หน้าหลัก</button>
+            <button class="cat-btn" onclick="loadCategory('series.json', this)">🎬 ซีรีส์</button>
+            <button class="cat-btn" onclick="loadCategory('cinema.json', this)">🍿 ภาพยนตร์</button>
+            <button class="cat-btn" onclick="loadCategory('anime.json', this)">🍙 อニメ (Anime)</button>
+            <button class="cat-btn" onclick="loadCategory('adult.json', this)">🔞 18+</button>
+        </div>
+
         <video id="video" controls autoplay></video>
 
         <div id="playlist"></div>
     </div>
 
     <script>
-        const proxyBase = 'http://meowstream.gamer.gd/proxy.php';
+        const proxyBase = '//meowstream.gamer.gd/proxy.php';
         let hls;
 
-        async function init() {
+        // โหลดหมวดหมู่เริ่มต้น (data.json)
+        loadCategory('data.json');
+
+        async function loadCategory(filename, btnElement = null) {
+            // สลับสถานีปุ่ม active เมนู
+            if (btnElement) {
+                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+                btnElement.classList.add('active');
+            }
+
+            const playlistDiv = document.getElementById('playlist');
+            playlistDiv.innerHTML = "<p style='color:#aaa;'>กำลังโหลดข้อมูล...</p>";
+
             try {
-                const response = await fetch('data.json');
+                const response = await fetch(filename);
+                if (!response.ok) throw new Error("ไม่พบไฟล์");
                 const data = await response.json();
 
                 document.getElementById('main-title').innerText = data.name || "Meowseries Player";
-                const playlistDiv = document.getElementById('playlist');
+                playlistDiv.innerHTML = ""; 
 
                 let firstPlaySet = false;
 
-                // 1. ถ้าใน JSON มี "groups" ให้วิ่งลูปตาม groups
+                // รองรับทั้งโครงสร้าง groups และ stations
                 if (data.groups && Array.isArray(data.groups)) {
                     data.groups.forEach(group => {
                         const section = createSection(group.name);
@@ -55,9 +109,7 @@
                         });
                         playlistDiv.appendChild(section.container);
                     });
-                } 
-                // 2. ถ้าใน JSON มี "stations" อยู่ข้างนอกสุด (แบบไฟล์ data.json ปัจจุบันของคุณ)
-                else if (data.stations && Array.isArray(data.stations)) {
+                } else if (data.stations && Array.isArray(data.stations)) {
                     const section = createSection("รายการทั้งหมด");
                     data.stations.forEach(station => {
                         createButton(station, section.list, () => {
@@ -73,11 +125,10 @@
 
             } catch (error) {
                 console.error("โหลดข้อมูล JSON ไม่สำเร็จ:", error);
-                document.getElementById('main-title').innerText = "ไม่พบไฟล์หรือรูปแบบ JSON ไม่ถูกต้อง";
+                playlistDiv.innerHTML = `<p style="color: #ff4757;">ไม่พบไฟล์ ${filename} หรือรูปแบบ JSON ไม่ถูกต้อง</p>`;
             }
         }
 
-        // ฟังก์ชันช่วยสร้างโครงสร้างหน้าตาหมวดหมู่
         function createSection(titleText) {
             const container = document.createElement('div');
             container.className = 'group-section';
@@ -94,10 +145,24 @@
             return { container, list };
         }
 
-        // ฟังก์ชันช่วยสร้างปุ่มกด
         function createButton(station, parentElement, onClickCallback) {
             const btn = document.createElement('button');
-            btn.innerText = station.name;
+            btn.className = 'station-btn';
+            
+            const imgUrl = station.image || 'https://via.placeholder.com/40x60?text=No+Img';
+            const img = document.createElement('img');
+            img.src = imgUrl;
+            img.alt = station.name;
+            btn.appendChild(img);
+
+            const span = document.createElement('span');
+            let label = station.name;
+            if (station.info) {
+                label += `<br><small style="color: #bbb;">${station.info}</small>`;
+            }
+            span.innerHTML = label;
+            btn.appendChild(span);
+
             btn.onclick = onClickCallback;
             parentElement.appendChild(btn);
         }
@@ -119,8 +184,6 @@
                 video.addEventListener('loadedmetadata', () => video.play());
             }
         }
-
-        init();
     </script>
 </body>
 </html>
