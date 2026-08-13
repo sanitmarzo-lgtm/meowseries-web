@@ -63,7 +63,6 @@
     <h1 id="movie-title">กำลังโหลด...</h1>
 
     <div class="player-container">
-        <!-- เพิ่ม muted เพื่อให้มือถือยอมเล่นอัตโนมัติทันที -->
         <video id="video" controls playsinline muted></video>
     </div>
 
@@ -104,15 +103,17 @@
             if (Hls.isSupported()) {
                 const hls = new Hls({
                     xhrSetup: function (xhr, url) {
+                        // เช็คว่าถ้าลิงก์ย่อยยังไม่ผ่าน Proxy ให้ทำการแปะ Proxy เข้าไปข้างหน้าแบบสมบูรณ์
                         if (!url.includes('meow-stream-proxy.sarawutocha.workers.dev')) {
                             let absoluteUrl = url;
-                            if (url.startsWith('/')) {
+                            if (url.startsWith('http://') || url.startsWith('https://')) {
+                                absoluteUrl = url;
+                            } else if (url.startsWith('/')) {
                                 const targetObj = new URL(finalStreamUrl);
                                 absoluteUrl = targetObj.origin + url;
-                            } else if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                            } else {
                                 const baseUrlObj = new URL(finalStreamUrl);
-                                const baseDir = baseUrlObj.pathname.substring(0, baseUrlObj.pathname.lastIndexOf('/') + 1);
-                                absoluteUrl = baseUrlObj.origin + baseDir + url;
+                                absoluteUrl = new URL(url, baseUrlObj.href).href;
                             }
                             url = proxyBase + encodeURIComponent(absoluteUrl);
                         }
@@ -125,7 +126,6 @@
                 
                 hls.on(Hls.Events.MANIFEST_PARSED, function() {
                     video.play().then(() => {
-                        // เล่นได้แล้ว ค่อยเปิดเสียงให้อัตโนมัติหลังเล่นไปแว้บหนึ่ง
                         setTimeout(() => { video.muted = false; }, 500);
                     }).catch(e => console.log("Play blocked:", e));
                 });
