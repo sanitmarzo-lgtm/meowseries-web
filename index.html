@@ -97,7 +97,6 @@
             let finalStreamUrl = rawStreamUrl;
             let targetReferer = stationReferer || 'https://main.24playerhd.com/';
 
-            // จัดการประกอบ URL เต็มรูปแบบ
             if (!finalStreamUrl.startsWith('http://') && !finalStreamUrl.startsWith('https://')) {
                 let baseOrigin = new URL(targetReferer).origin;
                 finalStreamUrl = baseOrigin + (finalStreamUrl.startsWith('/') ? '' : '/') + finalStreamUrl;
@@ -110,21 +109,15 @@
                     xhrSetup: function(xhr, url) {
                         let cleanTargetUrl = url.trim();
                         
-                        if (cleanTargetUrl.includes('workers.dev')) {
-                            try {
-                                const parsed = new URL(cleanTargetUrl);
-                                const originalParam = parsed.searchParams.get('url');
-                                if (originalParam) cleanTargetUrl = decodeURIComponent(originalParam);
-                            } catch (e) {}
-                        }
-
+                        // ถ้า Hls.js พยายามโหลดซับเพลย์ลิสต์ ให้แปลงเป็นAbsolute URL เทียบกับไฟล์หลัก
                         if (!cleanTargetUrl.startsWith('http://') && !cleanTargetUrl.startsWith('https://')) {
-                            let baseOrigin = new URL(finalStreamUrl).origin;
-                            cleanTargetUrl = baseOrigin + (cleanTargetUrl.startsWith('/') ? '' : '/') + cleanTargetUrl;
+                            let baseUri = new URL(finalStreamUrl);
+                            cleanTargetUrl = new URL(cleanTargetUrl, baseUri).href;
                         }
 
-                        let subProxyUrl = proxyBase + encodeURIComponent(cleanTargetUrl) + '&referer=' + encodeURIComponent(targetReferer);
-                        xhr.open('GET', subProxyUrl, true);
+                        // ส่งผ่าน Worker แบบตรงๆ ไม่ซ้อนทับ
+                        let directProxyUrl = proxyBase + encodeURIComponent(cleanTargetUrl) + '&referer=' + encodeURIComponent(targetReferer);
+                        xhr.open('GET', directProxyUrl, true);
                     }
                 });
 
@@ -165,7 +158,7 @@
                 if (response.ok) {
                     let data = await response.json();
                     if (data.groups && Array.isArray(data.groups) && data.groups.length > 0) {
-                        let match = data.groups[0]; // ดึงกลุ่มแรก (Our Sticky Love) มาแสดงทันที
+                        let match = data.groups[0];
                         if (match && match.stations) {
                             foundStations = match.stations;
                             document.getElementById('movie-title').innerText = match.name || 'ซีรีส์ของฉัน';
