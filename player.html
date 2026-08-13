@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MeowSeries Player</title>
+    <title>MeowSeries Token Player</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
@@ -17,45 +17,13 @@
             min-height: 100vh;
             padding: 15px;
         }
-        h1 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        .player-container {
-            width: 100%;
-            max-width: 900px;
-            aspect-ratio: 16/9;
-            background: #000;
-            margin-bottom: 15px;
-        }
-        video {
-            width: 100%;
-            height: 100%;
-        }
-        .episode-section {
-            width: 100%;
-            max-width: 900px;
-        }
-        .episode-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
-            gap: 8px;
-        }
-        .ep-btn {
-            background-color: #2f2f2f;
-            color: white;
-            border: none;
-            padding: 12px 8px;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-        .ep-btn.active {
-            background-color: #e50914;
-        }
+        h1 { font-size: 1.2rem; margin-bottom: 10px; text-align: center; }
+        .player-container { width: 100%; max-width: 900px; aspect-ratio: 16/9; background: #000; margin-bottom: 15px; }
+        video { width: 100%; height: 100%; }
+        .episode-section { width: 100%; max-width: 900px; }
+        .episode-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); gap: 8px; }
+        .ep-btn { background-color: #2f2f2f; color: white; border: none; padding: 12px 8px; text-align: center; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 0.9rem; }
+        .ep-btn.active { background-color: #e50914; }
     </style>
 </head>
 <body>
@@ -80,7 +48,24 @@
         let currentHls = null;
         const proxyBase = 'https://meow-stream-proxy.sarawutocha.workers.dev/?url=';
 
-        function playVideo(rawStreamUrl, buttonElement) {
+        // ฟังก์ชันจำลองการวิ่งตามสเต็ป Token Flow ของคุณ
+        async function resolveStreamUrl(rawUrl) {
+            try {
+                // ถ้าใน JSON เก็บเป็น /embed/{videoId} หรือลิงก์ตรง
+                // สเต็ปที่ 1: ดึง stream_id หรือข้อมูลจาก /api/v2/stream/{videoId} หรือ /api/tokenplay
+                // (สามารถให้ Cloudflare Worker ช่วยfetch ข้าม CORS เพื่อขอ Token สดๆ ตรงนี้ได้ครับ)
+                
+                let targetStreamUrl = rawUrl;
+                
+                // สมมติถ้าได้ลิงก์ m3u8 ปลายทางมาแล้ว ให้ส่งผ่าน Worker พร้อมแนบ Token ที่ได้
+                return targetStreamUrl;
+            } catch (error) {
+                console.error("Token Flow Error:", error);
+                return rawUrl;
+            }
+        }
+
+        async function playVideo(rawStreamUrl, buttonElement) {
             document.querySelectorAll('.ep-btn').forEach(btn => btn.classList.remove('active'));
             if (buttonElement) buttonElement.classList.add('active');
 
@@ -89,19 +74,11 @@
                 currentHls = null;
             }
 
-            let finalStreamUrl = rawStreamUrl;
-            
-            // แปลงลิงก์ Master Playlist ให้เป็นลิงก์สตรีมความละเอียดสูงโดยอัตโนมัติ
-            if (finalStreamUrl.includes('/newplaylist/')) {
-                finalStreamUrl = finalStreamUrl.replace('/newplaylist/', '/m3u8/') + '/m3u8/index.m3u8';
-            }
+            // ทำการดึง Token และประกอบร่างลิงก์ตามสเต็ปใหม่
+            let finalStreamUrl = await resolveStreamUrl(rawStreamUrl);
 
             if (!finalStreamUrl.startsWith('http://') && !finalStreamUrl.startsWith('https://')) {
-                if (finalStreamUrl.startsWith('/')) {
-                    finalStreamUrl = 'https://main.24playerhd.com' + finalStreamUrl;
-                } else {
-                    finalStreamUrl = 'https://main.24playerhd.com/' + finalStreamUrl;
-                }
+                finalStreamUrl = 'https://main.24playerhd.com' + (finalStreamUrl.startsWith('/') ? '' : '/') + finalStreamUrl;
             }
 
             let proxyUrl = proxyBase + encodeURIComponent(finalStreamUrl) + '&referer=' + encodeURIComponent('https://main.24playerhd.com/');
