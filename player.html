@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MeowSeries Player</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <title>MeowSeries Video.js Player</title>
+    <!-- เรียกใช้งาน Video.js และระบบรองรับ HLS -->
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
     <style>
         body {
             margin: 0;
@@ -17,45 +18,13 @@
             min-height: 100vh;
             padding: 15px;
         }
-        h1 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        .player-container {
-            width: 100%;
-            max-width: 900px;
-            aspect-ratio: 16/9;
-            background: #000;
-            margin-bottom: 15px;
-        }
-        video {
-            width: 100%;
-            height: 100%;
-        }
-        .episode-section {
-            width: 100%;
-            max-width: 900px;
-        }
-        .episode-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
-            gap: 8px;
-        }
-        .ep-btn {
-            background-color: #2f2f2f;
-            color: white;
-            border: none;
-            padding: 12px 8px;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-        .ep-btn.active {
-            background-color: #e50914;
-        }
+        h1 { font-size: 1.2rem; margin-bottom: 10px; text-align: center; }
+        .player-container { width: 100%; max-width: 900px; aspect-ratio: 16/9; background: #000; margin-bottom: 15px; }
+        .video-js { width: 100%; height: 100%; }
+        .episode-section { width: 100%; max-width: 900px; }
+        .episode-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); gap: 8px; }
+        .ep-btn { background-color: #2f2f2f; color: white; border: none; padding: 12px 8px; text-align: center; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 0.9rem; }
+        .ep-btn.active { background-color: #e50914; }
     </style>
 </head>
 <body>
@@ -63,7 +32,9 @@
     <h1 id="movie-title">กำลังโหลด...</h1>
 
     <div class="player-container">
-        <video id="video" controls playsinline></video>
+        <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" playsinline>
+            <p class="vjs-no-js">กรุณาเปิดใช้งาน JavaScript เพื่อรับชมวิดีโอ</p>
+        </video>
     </div>
 
     <div class="episode-section">
@@ -71,67 +42,38 @@
         <div class="episode-grid" id="episode-list"></div>
     </div>
 
+    <!-- โหลดสคริปต์ Video.js -->
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const titleParam = urlParams.get('title') || 'ซีรีส์ของฉัน';
         document.getElementById('movie-title').innerText = titleParam;
 
-        const video = document.getElementById('video');
-        let currentHls = null;
+        let player = videojs('my-video');
         const proxyBase = 'https://meow-stream-proxy.sarawutocha.workers.dev/?url=';
 
         function playVideo(rawStreamUrl, buttonElement) {
             document.querySelectorAll('.ep-btn').forEach(btn => btn.classList.remove('active'));
             if (buttonElement) buttonElement.classList.add('active');
 
-            if (currentHls) {
-                currentHls.destroy();
-                currentHls = null;
-            }
-
             let finalStreamUrl = rawStreamUrl;
 
-            if (finalStreamUrl.includes('/newplaylist/') || finalStreamUrl.endsWith('.m3u8')) {
-                let cleanBase = finalStreamUrl.replace(/\/[^\/]+\.m3u8$/, '');
-                finalStreamUrl = cleanBase + '/m3u8/index.m3u8';
-            }
-
             if (!finalStreamUrl.startsWith('http://') && !finalStreamUrl.startsWith('https://')) {
-                if (finalStreamUrl.startsWith('/')) {
-                    finalStreamUrl = 'https://main.24playerhd.com' + finalStreamUrl;
-                } else {
-                    finalStreamUrl = 'https://main.24playerhd.com/' + finalStreamUrl;
-                }
+                finalStreamUrl = 'https://main.24playerhd.com' + (finalStreamUrl.startsWith('/') ? '' : '/') + finalStreamUrl;
             }
 
-            let proxyUrl = proxyBase + encodeURIComponent(finalStreamUrl) + '&referer=' + encodeURIComponent('https://main.24playerhd.com/');
+            // ส่งลิงก์ Master Playlist ตรงๆ ผ่าน Worker ไปให้ Video.js จัดการถอดรหัสต่อเองได้เลย
+            let proxyUrl = proxyBase + encodeURIComponent(finalStreamUrl) + '&referer=' + encodeURIComponent('https://main.24parserhd.com/');
 
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(proxyUrl);
-                hls.attachMedia(video);
-                
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(e => console.log("Play blocked:", e));
-                });
+            player.src({
+                src: proxyUrl,
+                type: 'application/x-mpegURL'
+            });
 
-                hls.on(Hls.Events.ERROR, function (event, data) {
-                    if (data.fatal) {
-                        switch (data.type) {
-                            case Hls.ErrorTypes.NETWORK_ERROR: hls.startLoad(); break;
-                            case Hls.ErrorTypes.MEDIA_ERROR: hls.recoverMediaError(); break;
-                            default: hls.destroy(); break;
-                        }
-                    }
-                });
-
-                currentHls = hls;
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = proxyUrl;
-                video.addEventListener('loadedmetadata', function() {
-                    video.play().catch(e => console.log("Play blocked:", e));
-                });
-            }
+            player.ready(function() {
+                player.play().catch(e => console.log("Play restricted:", e));
+            });
         }
 
         async function loadEpisodes() {
