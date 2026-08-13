@@ -83,7 +83,6 @@
         const video = document.getElementById('video');
         let currentHls = null;
         
-        // ** URL ของ Cloudflare Worker ของคุณ **
         const proxyBase = 'https://meow-stream-proxy.sarawutocha.workers.dev/?url=';
 
         function playVideo(rawStreamUrl, stationReferer, buttonElement) {
@@ -98,8 +97,10 @@
             let finalStreamUrl = rawStreamUrl;
             let targetReferer = stationReferer || 'https://main.24playerhd.com/';
 
+            // จัดการประกอบ URL เต็มรูปแบบ
             if (!finalStreamUrl.startsWith('http://') && !finalStreamUrl.startsWith('https://')) {
-                finalStreamUrl = 'https://main.24playerhd.com' + (finalStreamUrl.startsWith('/') ? '' : '/') + finalStreamUrl;
+                let baseOrigin = new URL(targetReferer).origin;
+                finalStreamUrl = baseOrigin + (finalStreamUrl.startsWith('/') ? '' : '/') + finalStreamUrl;
             }
 
             let proxyUrl = proxyBase + encodeURIComponent(finalStreamUrl) + '&referer=' + encodeURIComponent(targetReferer);
@@ -108,6 +109,7 @@
                 const hls = new Hls({
                     xhrSetup: function(xhr, url) {
                         let cleanTargetUrl = url.trim();
+                        
                         if (cleanTargetUrl.includes('workers.dev')) {
                             try {
                                 const parsed = new URL(cleanTargetUrl);
@@ -115,6 +117,12 @@
                                 if (originalParam) cleanTargetUrl = decodeURIComponent(originalParam);
                             } catch (e) {}
                         }
+
+                        if (!cleanTargetUrl.startsWith('http://') && !cleanTargetUrl.startsWith('https://')) {
+                            let baseOrigin = new URL(finalStreamUrl).origin;
+                            cleanTargetUrl = baseOrigin + (cleanTargetUrl.startsWith('/') ? '' : '/') + cleanTargetUrl;
+                        }
+
                         let subProxyUrl = proxyBase + encodeURIComponent(cleanTargetUrl) + '&referer=' + encodeURIComponent(targetReferer);
                         xhr.open('GET', subProxyUrl, true);
                     }
@@ -147,7 +155,6 @@
         }
 
         async function loadEpisodes() {
-            // เลือกไฟล์ JSON ตามพารามิเตอร์ เช่น ?file=anime.json หรือถ้าไม่ใส่จะเปิด series.json เป็นค่าเริ่มต้น
             const jsonFile = urlParams.get('file') || 'series.json';
             let foundStations = [];
             const epListContainer = document.getElementById('episode-list');
@@ -158,10 +165,7 @@
                 if (response.ok) {
                     let data = await response.json();
                     if (data.groups && Array.isArray(data.groups) && data.groups.length > 0) {
-                        // ถ้าไม่ได้ระบุชื่อเรื่องมา ให้ดึงข้อมูลกลุ่มแรกในไฟล์นั้นมาแสดงทันที
-                        let match = (titleParam === 'ซีรีส์ของฉัน') ? data.groups[0] : data.groups.find(g => g.name.includes(titleParam) || titleParam.includes(g.name));
-                        if (!match) match = data.groups[0]; // ป้องกันกรณีหาชื่อไม่เจอ ให้เอาตัวแรกสุดแทน
-                        
+                        let match = data.groups[0]; // ดึงกลุ่มแรก (Our Sticky Love) มาแสดงทันที
                         if (match && match.stations) {
                             foundStations = match.stations;
                             document.getElementById('movie-title').innerText = match.name || 'ซีรีส์ของฉัน';
