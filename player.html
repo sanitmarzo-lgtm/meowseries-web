@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MeowSeries Player</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
             margin: 0;
@@ -63,7 +62,8 @@
     <h1 id="movie-title">กำลังโหลด...</h1>
 
     <div class="player-container">
-        <video id="video" controls playsinline muted></video>
+        <!-- ใช้ Native Player ตรงๆ ไม่ผ่าน Proxy -->
+        <video id="video" controls playsinline></video>
     </div>
 
     <div class="episode-section">
@@ -77,17 +77,10 @@
         document.getElementById('movie-title').innerText = titleParam;
 
         const video = document.getElementById('video');
-        let currentHls = null;
-        const proxyBase = 'https://meow-stream-proxy.sarawutocha.workers.dev/?url=';
 
         function playVideo(rawStreamUrl, buttonElement) {
             document.querySelectorAll('.ep-btn').forEach(btn => btn.classList.remove('active'));
             if (buttonElement) buttonElement.classList.add('active');
-
-            if (currentHls) {
-                currentHls.destroy();
-                currentHls = null;
-            }
 
             let finalStreamUrl = rawStreamUrl;
             if (!finalStreamUrl.startsWith('http://') && !finalStreamUrl.startsWith('https://')) {
@@ -98,14 +91,77 @@
                 }
             }
 
-            const proxyUrl = proxyBase + encodeURIComponent(finalStreamUrl);
+            // ส่งลิงก์ตรงเข้า video src ทันที
+            video.src = finalStreamUrl;
+            video.load();
+            video.play().catch(e => console.log("Play blocked:", e));
+        }
 
-            if (Hls.isSupported()) {
-                const hls = new Hls({
-                    xhrSetup: function (xhr, url) {
-                        // เช็คว่าถ้าลิงก์ย่อยยังไม่ผ่าน Proxy ให้ทำการแปะ Proxy เข้าไปข้างหน้าแบบสมบูรณ์
-                        if (!url.includes('meow-stream-proxy.sarawutocha.workers.dev')) {
-                            let absoluteUrl = url;
+        async function loadEpisodes() {
+            const jsonFiles = ['series.json', 'anime.json', 'cinema.json', 'vertical.json', 'adult.json'];
+            let foundStations = [];
+            const epListContainer = document.getElementById('episode-list');
+            epListContainer.innerHTML = '<div style="color:#aaa; grid-column: 1/-1;">กำลังค้นหาตอน...</div>';
+
+            for (let file of jsonFiles) {
+                try {
+                    let response = await fetch(file);
+                    if (response.ok) {
+                        let data = await response.json();
+                        if (data.groups && Array.isArray(data.groups)) {
+                            let match = data.groups.find(g => g.name === titleParam);
+                            if (match && match.stations) {
+                                foundStations = match.stations;
+                                break;
+                            }
+                        }
+                        if (data.stations && Array.isArray(data.stations)) {
+                            let match = data.stations.filter(s => s.name === titleParam);
+                            if (match.length > 0) {
+                                foundStations = match;
+                                break;
+                            }
+                        }
+                    }
+                } catch (e) {}
+            }
+
+            epListContainer.innerHTML = '';
+
+            if (foundStations.length === 0) {
+                epListContainer.innerHTML = '<div style="color:#e50914; grid-column: 1/-1;">ไม่พบข้อมูลสตรีมมิ่ง</div>';
+                document.getElementById('movie-title').innerText = titleParam + " (ไม่พบลิงก์)";
+                return;
+            }
+
+            let firstButton = null;
+            foundStations.forEach((station, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'ep-btn';
+                
+                let epLabel = 'EP ' + (index + 1);
+                if (station.info && !station.info.includes('เสียง')) {
+                    epLabel = station.info.replace('ตอนที่', 'EP');
+                }
+                btn.innerText = epLabel;
+                
+                btn.onclick = function() {
+                    playVideo(station.url, btn);
+                };
+                epListContainer.appendChild(btn);
+
+                if (index === 0) firstButton = btn;
+            });
+
+            if (foundStations.length > 0 && firstButton) {
+                playVideo(foundStations[0].url, firstButton);
+            }
+        }
+
+        loadEpisodes();
+    </script>
+</body>
+</html>
                             if (url.startsWith('http://') || url.startsWith('https://')) {
                                 absoluteUrl = url;
                             } else if (url.startsWith('/')) {
