@@ -12,7 +12,7 @@
         h1 { margin-bottom: 10px; }
         .group-section { margin-top: 20px; text-align: left; }
         .group-title { color: #ff4757; border-bottom: 2px solid #ff4757; padding-bottom: 5px; margin-bottom: 10px; }
-        .episode-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 10px; }
+        .episode-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-top: 10px; }
         button { background: #2f3542; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 5px; transition: 0.3s; }
         button:hover { background: #ff4757; }
     </style>
@@ -20,7 +20,7 @@
 <body>
 
     <div class="container">
-        <h1 id="main-title">กำลังโหลดข้อมูลซีรีส์...</h1>
+        <h1 id="main-title">Meowseries Player</h1>
         <video id="video" controls autoplay></video>
 
         <div id="playlist"></div>
@@ -35,42 +35,78 @@
                 const response = await fetch('data.json');
                 const data = await response.json();
 
-                document.getElementById('main-title').innerText = data.name;
+                document.getElementById('main-title').innerText = data.name || "Meowseries Player";
                 const playlistDiv = document.getElementById('playlist');
 
-                // วนลูปกลุ่มซีรีส์
-                data.groups.forEach(group => {
-                    const section = document.createElement('div');
-                    section.className = 'group-section';
-                    
-                    const title = document.createElement('h3');
-                    title.className = 'group-title';
-                    title.innerText = group.name;
-                    section.appendChild(title);
+                let firstPlaySet = false;
 
-                    const list = document.createElement('div');
-                    list.className = 'episode-list';
-
-                    // วนลูปตอนภายในกลุ่ม
-                    group.stations.forEach((station) => {
-                        const btn = document.createElement('button');
-                        btn.innerText = station.name;
-                        btn.onclick = () => playVideo(station.url, station.referer);
-                        list.appendChild(btn);
+                // 1. ถ้าใน JSON มี "groups" ให้วิ่งลูปตาม groups
+                if (data.groups && Array.isArray(data.groups)) {
+                    data.groups.forEach(group => {
+                        const section = createSection(group.name);
+                        group.stations.forEach(station => {
+                            createButton(station, section.list, () => {
+                                playVideo(station.url, station.referer);
+                            });
+                            if (!firstPlaySet) {
+                                playVideo(station.url, station.referer);
+                                firstPlaySet = true;
+                            }
+                        });
+                        playlistDiv.appendChild(section.container);
                     });
+                } 
+                // 2. ถ้าใน JSON มี "stations" อยู่ข้างนอกสุด (แบบไฟล์ data.json ปัจจุบันของคุณ)
+                else if (data.stations && Array.isArray(data.stations)) {
+                    const section = createSection("รายการทั้งหมด");
+                    data.stations.forEach(station => {
+                        createButton(station, section.list, () => {
+                            playVideo(station.url, station.referer);
+                        });
+                        if (!firstPlaySet) {
+                            playVideo(station.url, station.referer);
+                            firstPlaySet = true;
+                        }
+                    });
+                    playlistDiv.appendChild(section.container);
+                }
 
-                    section.appendChild(list);
-                    playlistDiv.appendChild(section);
-                });
             } catch (error) {
                 console.error("โหลดข้อมูล JSON ไม่สำเร็จ:", error);
-                document.getElementById('main-title').innerText = "ไม่พบไฟล์ data.json";
+                document.getElementById('main-title').innerText = "ไม่พบไฟล์หรือรูปแบบ JSON ไม่ถูกต้อง";
             }
         }
 
+        // ฟังก์ชันช่วยสร้างโครงสร้างหน้าตาหมวดหมู่
+        function createSection(titleText) {
+            const container = document.createElement('div');
+            container.className = 'group-section';
+            
+            const title = document.createElement('h3');
+            title.className = 'group-title';
+            title.innerText = titleText;
+            container.appendChild(title);
+
+            const list = document.createElement('div');
+            list.className = 'episode-list';
+            container.appendChild(list);
+
+            return { container, list };
+        }
+
+        // ฟังก์ชันช่วยสร้างปุ่มกด
+        function createButton(station, parentElement, onClickCallback) {
+            const btn = document.createElement('button');
+            btn.innerText = station.name;
+            btn.onclick = onClickCallback;
+            parentElement.appendChild(btn);
+        }
+
         function playVideo(url, referer) {
+            if (!url) return;
             const video = document.getElementById('video');
-            const finalUrl = `${proxyBase}?url=${encodeURIComponent(url)}&referer=${encodeURIComponent(referer)}`;
+            const safeReferer = referer || '';
+            const finalUrl = `${proxyBase}?url=${encodeURIComponent(url)}&referer=${encodeURIComponent(safeReferer)}`;
 
             if (Hls.isSupported()) {
                 if (hls) hls.destroy();
