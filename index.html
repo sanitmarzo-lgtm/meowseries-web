@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MeowSeries Player</title>
-    <!-- โหลดตัวเล่น HLS.js สำหรับจัดการสตรีมวิดีโอ -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
@@ -80,12 +79,11 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const titleParam = urlParams.get('title') || 'ซีรีส์ของฉัน';
-        document.getElementById('movie-title').innerText = titleParam;
-
+        
         const video = document.getElementById('video');
         let currentHls = null;
         
-        // ** ใส่ URL ของ Cloudflare Worker ของคุณตรงนี้ถูกต้องแล้ว **
+        // ** URL ของ Cloudflare Worker ของคุณ **
         const proxyBase = 'https://meow-stream-proxy.sarawutocha.workers.dev/?url=';
 
         function playVideo(rawStreamUrl, stationReferer, buttonElement) {
@@ -149,32 +147,34 @@
         }
 
         async function loadEpisodes() {
-            const jsonFiles = ['series.json', 'drama_list.json'];
+            // เลือกไฟล์ JSON ตามพารามิเตอร์ เช่น ?file=anime.json หรือถ้าไม่ใส่จะเปิด series.json เป็นค่าเริ่มต้น
+            const jsonFile = urlParams.get('file') || 'series.json';
             let foundStations = [];
             const epListContainer = document.getElementById('episode-list');
             epListContainer.innerHTML = '<div style="color:#aaa; grid-column: 1/-1;">กำลังค้นหาตอน...</div>';
 
-            for (let file of jsonFiles) {
-                try {
-                    let response = await fetch(file);
-                    if (response.ok) {
-                        let data = await response.json();
-                        if (data.groups && Array.isArray(data.groups)) {
-                            let match = data.groups.find(g => g.name.includes(titleParam) || titleParam.includes(g.name));
-                            if (match && match.stations) {
-                                foundStations = match.stations;
-                                break;
-                            }
+            try {
+                let response = await fetch(jsonFile);
+                if (response.ok) {
+                    let data = await response.json();
+                    if (data.groups && Array.isArray(data.groups) && data.groups.length > 0) {
+                        // ถ้าไม่ได้ระบุชื่อเรื่องมา ให้ดึงข้อมูลกลุ่มแรกในไฟล์นั้นมาแสดงทันที
+                        let match = (titleParam === 'ซีรีส์ของฉัน') ? data.groups[0] : data.groups.find(g => g.name.includes(titleParam) || titleParam.includes(g.name));
+                        if (!match) match = data.groups[0]; // ป้องกันกรณีหาชื่อไม่เจอ ให้เอาตัวแรกสุดแทน
+                        
+                        if (match && match.stations) {
+                            foundStations = match.stations;
+                            document.getElementById('movie-title').innerText = match.name || 'ซีรีส์ของฉัน';
                         }
                     }
-                } catch (e) {}
-            }
+                }
+            } catch (e) {}
 
             epListContainer.innerHTML = '';
 
             if (foundStations.length === 0) {
-                epListContainer.innerHTML = '<div style="color:#e50914; grid-column: 1/-1;">ไม่พบลิงก์ซีรีส์นี้</div>';
-                document.getElementById('movie-title').innerText = titleParam + " (ไม่พบข้อมูล)";
+                epListContainer.innerHTML = '<div style="color:#e50914; grid-column: 1/-1;">ไม่พบลิงก์ในไฟล์นี้</div>';
+                document.getElementById('movie-title').innerText = "ไม่พบข้อมูล";
                 return;
             }
 
