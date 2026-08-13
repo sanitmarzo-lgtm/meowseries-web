@@ -105,8 +105,11 @@
             if (Hls.isSupported()) {
                 const hls = new Hls({
                     xhrSetup: function(xhr, url) {
-                        // บังคับแนบ Referer ไปกับทุกซับรีเควสต์ (รวมถึงไฟล์ .ts ย่อย)
-                        let subProxyUrl = proxyBase + encodeURIComponent(url) + '&referer=' + encodeURIComponent(targetReferer);
+                        let cleanTargetUrl = url.trim();
+                        if (cleanTargetUrl.endsWith('%2F')) {
+                            cleanTargetUrl = cleanTargetUrl.slice(0, -3);
+                        }
+                        let subProxyUrl = proxyBase + encodeURIComponent(cleanTargetUrl) + '&referer=' + encodeURIComponent(targetReferer);
                         xhr.open('GET', subProxyUrl, true);
                     }
                 });
