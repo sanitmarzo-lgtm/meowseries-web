@@ -101,7 +101,6 @@
             if (Hls.isSupported()) {
                 const hls = new Hls({
                     xhrSetup: function (xhr, url) {
-                        // บังคับให้ทุกรีเควสท์ (รวมทั้งไฟล์ .ts ย่อย) วิ่งผ่าน Proxy ของเราทั้งหมด
                         if (!url.includes('meow-stream-proxy.sarawutocha.workers.dev')) {
                             let absoluteUrl = url;
                             if (url.startsWith('/')) {
@@ -135,7 +134,6 @@
 
                 currentHls = hls;
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // สำหรับมือถือ iOS (Safari) ที่รองรับ HLS Native
                 video.src = proxyUrl;
                 video.addEventListener('loadedmetadata', function() {
                     video.play().catch(e => console.log("Play blocked:", e));
@@ -184,7 +182,13 @@
             foundStations.forEach((station, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'ep-btn';
-                btn.innerText = station.info ? station.info.replace('ตอนที่', 'EP') : 'EP ' + (index + 1);
+                
+                // จัดการแสดงชื่อปุ่มให้เป็น EP 1, EP 2... อย่างสวยงาม
+                let epLabel = 'EP ' + (index + 1);
+                if (station.info && !station.info.includes('เสียง')) {
+                    epLabel = station.info.replace('ตอนที่', 'EP');
+                }
+                btn.innerText = epLabel;
                 
                 btn.onclick = function() {
                     playVideo(station.url, btn);
