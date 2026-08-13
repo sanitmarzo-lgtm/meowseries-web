@@ -63,7 +63,8 @@
     <h1 id="movie-title">กำลังโหลด...</h1>
 
     <div class="player-container">
-        <video id="video" controls playsinline></video>
+        <!-- เพิ่ม muted เพื่อให้มือถือยอมเล่นอัตโนมัติทันที -->
+        <video id="video" controls playsinline muted></video>
     </div>
 
     <div class="episode-section">
@@ -123,7 +124,10 @@
                 hls.attachMedia(video);
                 
                 hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(e => console.log("Play blocked:", e));
+                    video.play().then(() => {
+                        // เล่นได้แล้ว ค่อยเปิดเสียงให้อัตโนมัติหลังเล่นไปแว้บหนึ่ง
+                        setTimeout(() => { video.muted = false; }, 500);
+                    }).catch(e => console.log("Play blocked:", e));
                 });
 
                 hls.on(Hls.Events.ERROR, function (event, data) {
@@ -140,7 +144,9 @@
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = proxyUrl;
                 video.addEventListener('loadedmetadata', function() {
-                    video.play().catch(e => console.log("Play blocked:", e));
+                    video.play().then(() => {
+                        setTimeout(() => { video.muted = false; }, 500);
+                    }).catch(e => console.log("Play blocked:", e));
                 });
             }
         }
