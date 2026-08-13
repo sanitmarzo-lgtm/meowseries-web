@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MeowSeries Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
             margin: 0;
@@ -27,13 +28,10 @@
             aspect-ratio: 16/9;
             background: #000;
             margin-bottom: 15px;
-            border-radius: 8px;
-            overflow: hidden;
         }
-        iframe {
+        video {
             width: 100%;
             height: 100%;
-            border: none;
         }
         .episode-section {
             width: 100%;
@@ -65,8 +63,7 @@
     <h1 id="movie-title">กำลังโหลด...</h1>
 
     <div class="player-container">
-        <!-- ใช้ Iframe ฝังตัวเล่นสำเร็จรูป ตัดปัญหาจอดำและโค้ดพัง -->
-        <iframe id="video-frame" src="" allowfullscreen></iframe>
+        <video id="video" controls playsinline></video>
     </div>
 
     <div class="episode-section">
@@ -79,11 +76,17 @@
         const titleParam = urlParams.get('title') || 'ซีรีส์ของฉัน';
         document.getElementById('movie-title').innerText = titleParam;
 
-        const videoFrame = document.getElementById('video-frame');
+        const video = document.getElementById('video');
+        let currentHls = null;
 
         function playVideo(rawStreamUrl, buttonElement) {
             document.querySelectorAll('.ep-btn').forEach(btn => btn.classList.remove('active'));
             if (buttonElement) buttonElement.classList.add('active');
+
+            if (currentHls) {
+                currentHls.destroy();
+                currentHls = null;
+            }
 
             let finalStreamUrl = rawStreamUrl;
             if (!finalStreamUrl.startsWith('http://') && !finalStreamUrl.startsWith('https://')) {
@@ -94,8 +97,32 @@
                 }
             }
 
-            // ส่งลิงก์เข้า Player สำเร็จรูปผ่าน iframe เล่นได้ทันทีในหน้าเว็บ
-            videoFrame.src = "https://hls-player.net/embed.php?url=" + encodeURIComponent(finalStreamUrl);
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(finalStreamUrl);
+                hls.attachMedia(video);
+                
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play().catch(e => console.log("Play blocked:", e));
+                });
+
+                hls.on(Hls.Events.ERROR, function (event, data) {
+                    if (data.fatal) {
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR: hls.startLoad(); break;
+                            case Hls.ErrorTypes.MEDIA_ERROR: hls.recoverMediaError(); break;
+                            default: hls.destroy(); break;
+                        }
+                    }
+                });
+
+                currentHls = hls;
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = finalStreamUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play().catch(e => console.log("Play blocked:", e));
+                });
+            }
         }
 
         async function loadEpisodes() {
