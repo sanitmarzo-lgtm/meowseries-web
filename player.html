@@ -89,10 +89,13 @@
                 currentHls = null;
             }
 
+            // จัดการลิงก์ต้นทางให้ถูกต้อง ไม่เติมโดเมนซ้ำซ้อน
             let finalStreamUrl = rawStreamUrl;
-            if (finalStreamUrl.startsWith('/')) {
+            if (finalStreamUrl.startsWith('http://') || finalStreamUrl.startsWith('https://')) {
+                finalStreamUrl = finalStreamUrl;
+            } else if (finalStreamUrl.startsWith('/')) {
                 finalStreamUrl = 'https://m35.999play4.com' + finalStreamUrl;
-            } else if (!finalStreamUrl.startsWith('http://') && !finalStreamUrl.startsWith('https://')) {
+            } else {
                 finalStreamUrl = 'https://m35.999play4.com/' + finalStreamUrl;
             }
 
@@ -183,7 +186,6 @@
                 const btn = document.createElement('button');
                 btn.className = 'ep-btn';
                 
-                // จัดการแสดงชื่อปุ่มให้เป็น EP 1, EP 2... อย่างสวยงาม
                 let epLabel = 'EP ' + (index + 1);
                 if (station.info && !station.info.includes('เสียง')) {
                     epLabel = station.info.replace('ตอนที่', 'EP');
