@@ -79,9 +79,8 @@
         const video = document.getElementById('video');
         let currentHls = null;
         const proxyBase = 'https://meow-stream-proxy.sarawutocha.workers.dev/?url=';
-        const targetReferer = 'https://main.24playerhd.com/';
 
-        function playVideo(rawStreamUrl, buttonElement) {
+        function playVideo(rawStreamUrl, stationReferer, buttonElement) {
             document.querySelectorAll('.ep-btn').forEach(btn => btn.classList.remove('active'));
             if (buttonElement) buttonElement.classList.add('active');
 
@@ -91,6 +90,7 @@
             }
 
             let finalStreamUrl = rawStreamUrl;
+            let targetReferer = stationReferer || 'https://main.24playerhd.com/';
 
             if (!finalStreamUrl.startsWith('http://') && !finalStreamUrl.startsWith('https://')) {
                 if (finalStreamUrl.startsWith('/')) {
@@ -147,7 +147,7 @@
         }
 
         async function loadEpisodes() {
-            const jsonFiles = ['series.json', 'anime.json', 'cinema.json', 'vertical.json', 'adult.json'];
+            const jsonFiles = ['series.json', 'anime.json', 'cinema.json', 'vertical.json', 'adult.json', 'drama_list.json', 'drama_list.w3u'];
             let foundStations = [];
             const epListContainer = document.getElementById('episode-list');
             epListContainer.innerHTML = '<div style="color:#aaa; grid-column: 1/-1;">กำลังค้นหาตอน...</div>';
@@ -158,14 +158,14 @@
                     if (response.ok) {
                         let data = await response.json();
                         if (data.groups && Array.isArray(data.groups)) {
-                            let match = data.groups.find(g => g.name === titleParam);
+                            let match = data.groups.find(g => g.name.includes(titleParam) || titleParam.includes(g.name));
                             if (match && match.stations) {
                                 foundStations = match.stations;
                                 break;
                             }
                         }
                         if (data.stations && Array.isArray(data.stations)) {
-                            let match = data.stations.filter(s => s.name === titleParam);
+                            let match = data.stations.filter(s => s.name.includes(titleParam));
                             if (match.length > 0) {
                                 foundStations = match;
                                 break;
@@ -189,13 +189,13 @@
                 btn.className = 'ep-btn';
                 
                 let epLabel = 'EP ' + (index + 1);
-                if (station.info && !station.info.includes('เสียง')) {
-                    epLabel = station.info.replace('ตอนที่', 'EP');
+                if (station.name && station.name.trim() !== '') {
+                    epLabel = station.name.replace('ตอนที่', 'EP');
                 }
                 btn.innerText = epLabel;
                 
                 btn.onclick = function() {
-                    playVideo(station.url, btn);
+                    playVideo(station.url, station.referer, btn);
                 };
                 epListContainer.appendChild(btn);
 
@@ -203,7 +203,7 @@
             });
 
             if (foundStations.length > 0 && firstButton) {
-                playVideo(foundStations[0].url, firstButton);
+                playVideo(foundStations[0].url, foundStations[0].referer, firstButton);
             }
         }
 
