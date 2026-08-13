@@ -2,40 +2,81 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>Meow Player</title>
+    <title>Meowseries Player</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body { background: #111; color: #fff; font-family: sans-serif; text-align: center; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; }
+        video { width: 100%; max-height: 450px; background: #000; border-radius: 8px; margin-bottom: 20px; }
+        .episode-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        button { background: #333; color: #fff; border: 1px solid #555; padding: 10px 15px; cursor: pointer; border-radius: 5px; }
+        button:hover { background: #e50914; border-color: #e50914; }
+    </style>
 </head>
-<body style="background: #111; color: #fff; font-family: sans-serif; text-align: center; margin-top: 50px;">
+<body>
 
-    <h2>ระบบเล่นวิดีโอผ่าน PHP Proxy</h2>
-    
-    <div>
-        <video id="video" controls autoplay style="width: 80%; max-width: 800px; background: #000; border-radius: 8px;"></video>
+    <div class="container">
+        <h1 id="title">กำลังโหลด...</h1>
+        
+        <!-- ตัวเล่นวิดีโอ -->
+        <video id="video" controls autoplay></video>
+
+        <h3>เลือกตอน</h3>
+        <div class="episode-list" id="playlist"></div>
     </div>
 
     <script>
-        const proxyBase = 'http://meowstream.gamer.gd/proxy.php?url=';
+        const proxyBase = 'http://meowstream.gamer.gd/proxy.php';
+        let hls;
 
-        // 🟢 ลิงก์สตรีม .m3u8 ของคุณถูกใส่ไว้ตรงนี้เรียบร้อยแล้ว
-        const targetVideoUrl = 'https://raw.githubusercontent.com/stream-test/test-streams/main/x1hou/playlist.m3u8'; 
+        async function init() {
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
 
-        const finalVideoUrl = proxyBase + encodeURIComponent(targetVideoUrl);
+                document.getElementById('title').innerText = data.groups[0].name;
+                const playlistDiv = document.getElementById('playlist');
 
-        const video = document.getElementById('video');
+                data.groups[0].stations.forEach((station, index) => {
+                    const btn = document.createElement('button');
+                    btn.innerText = station.name + ' (' + station.info + ')';
+                    btn.onclick = () => playVideo(station.url, station.referer);
+                    playlistDiv.appendChild(btn);
 
-        if (Hls.isSupported()) {
-            const hls = new Hls();
-            hls.loadSource(finalVideoUrl);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                video.play();
-            });
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = finalVideoUrl;
-            video.addEventListener('loadedmetadata', function() {
-                video.play();
-            });
+                    // เล่น EP แรกเป็นค่าเริ่มต้น
+                    if (index === 0) {
+                        playVideo(station.url, station.referer);
+                    }
+                });
+
+            } catch (error) {
+                console.error("โหลดข้อมูล JSON ไม่สำเร็จ:", error);
+            }
         }
+
+        function playVideo(url, referer) {
+            const video = document.getElementById('video');
+            const finalUrl = `${proxyBase}?url=${encodeURIComponent(url)}&referer=${encodeURIComponent(referer)}`;
+
+            if (Hls.isSupported()) {
+                if (hls) {
+                    hls.destroy();
+                }
+                hls = new Hls();
+                hls.loadSource(finalUrl);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play();
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = finalUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play();
+                });
+            }
+        }
+
+        init();
     </script>
 
 </body>
