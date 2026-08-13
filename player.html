@@ -79,6 +79,7 @@
         const video = document.getElementById('video');
         let currentHls = null;
         const proxyBase = 'https://meow-stream-proxy.sarawutocha.workers.dev/?url=';
+        const targetReferer = 'https://main.24playerhd.com/';
 
         function playVideo(rawStreamUrl, buttonElement) {
             document.querySelectorAll('.ep-btn').forEach(btn => btn.classList.remove('active'));
@@ -91,7 +92,6 @@
 
             let finalStreamUrl = rawStreamUrl;
 
-            // ตรวจสอบและเติม Domain หากลิงก์เป็น Relative Path
             if (!finalStreamUrl.startsWith('http://') && !finalStreamUrl.startsWith('https://')) {
                 if (finalStreamUrl.startsWith('/')) {
                     finalStreamUrl = 'https://main.24playerhd.com' + finalStreamUrl;
@@ -100,14 +100,14 @@
                 }
             }
 
-            let proxyUrl = proxyBase + encodeURIComponent(finalStreamUrl) + '&referer=' + encodeURIComponent('https://main.24playerhd.com/');
+            let proxyUrl = proxyBase + encodeURIComponent(finalStreamUrl) + '&referer=' + encodeURIComponent(targetReferer);
 
             if (Hls.isSupported()) {
                 const hls = new Hls({
                     xhrSetup: function(xhr, url) {
-                        if (url !== proxyUrl && !url.includes('meow-stream-proxy')) {
-                            xhr.open('GET', proxyBase + encodeURIComponent(url) + '&referer=' + encodeURIComponent('https://main.24playerhd.com/'), true);
-                        }
+                        // บังคับแนบ Referer ไปกับทุกซับรีเควสต์ (รวมถึงไฟล์ .ts ย่อย)
+                        let subProxyUrl = proxyBase + encodeURIComponent(url) + '&referer=' + encodeURIComponent(targetReferer);
+                        xhr.open('GET', subProxyUrl, true);
                     }
                 });
 
