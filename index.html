@@ -2,248 +2,202 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEOWSERIES - หน้าแรก</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MeowSeries Player</title>
+    <!-- โหลดตัวเล่น HLS.js สำหรับจัดการสตรีมวิดีโอ -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
-            background-color: #111;
-            color: #fff;
+            margin: 0;
+            background-color: #141414;
+            color: #ffffff;
             font-family: sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            padding: 20px 40px;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            background: rgba(0,0,0,0.9);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            flex-wrap: wrap;
-            gap: 15px;
+            min-height: 100vh;
+            padding: 10px;
         }
-        h1.logo {
-            color: #e50914;
-            margin: 0;
-            font-size: 22px;
-            cursor: pointer;
+        h1 {
+            font-size: 1.1rem;
+            margin: 10px 0;
+            text-align: center;
         }
-        nav {
-            display: flex;
-            gap: 10px;
-            font-size: 14px;
-            flex-wrap: wrap;
-        }
-        nav button {
-            background: #222;
-            border: 1px solid #444;
-            color: #aaa;
-            cursor: pointer;
-            font-size: 13px;
-            padding: 6px 12px;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-        nav button.active, nav button:hover {
-            background: #e50914;
-            color: #fff;
-            border-color: #e50914;
-            font-weight: bold;
-        }
-        .search-box {
-            padding: 8px 15px;
-            border-radius: 20px;
-            border: 1px solid #444;
-            background: #222;
-            color: #fff;
-            font-size: 14px;
-            width: 200px;
-            outline: none;
-        }
-        .search-box:focus {
-            border-color: #e50914;
-        }
-        .container {
-            padding: 40px;
-        }
-        .section-title {
-            font-size: 24px;
-            margin-bottom: 20px;
-            border-left: 4px solid #e50914;
-            padding-left: 10px;
-        }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 20px;
-        }
-        .card {
-            background: #1f1f1f;
+        .player-container {
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 16/9;
+            background: #000;
+            margin-bottom: 15px;
             border-radius: 8px;
             overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.2s;
         }
-        .card:hover {
-            transform: scale(1.05);
-        }
-        .card img {
+        video {
             width: 100%;
-            height: 250px;
-            object-fit: cover;
+            height: 100%;
         }
-        .card-content {
-            padding: 12px;
+        .episode-section {
+            width: 100%;
+            max-width: 800px;
         }
-        .card-title {
-            font-size: 14px;
-            font-weight: bold;
-            margin: 0 0 5px 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .episode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 8px;
+            max-height: 40vh;
+            overflow-y: auto;
+            padding-bottom: 20px;
         }
-        .card-info {
-            font-size: 12px;
-            color: #aaa;
-            margin: 0;
-        }
-        .no-result {
-            grid-column: 1 / -1;
+        .ep-btn {
+            background-color: #2f2f2f;
+            color: white;
+            border: none;
+            padding: 10px 5px;
             text-align: center;
-            color: #777;
-            padding: 40px;
-            font-size: 16px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+        .ep-btn.active {
+            background-color: #e50914;
         }
     </style>
 </head>
 <body>
 
-    <!-- เมนูด้านบนและปุ่มสลับหมวดหมู่ -->
-    <header>
-        <h1 class="logo" onclick="loadCategory('data.json', 'อัปเดตล่าสุด', event)">MEOWSERIES</h1>
-        
-        <input type="text" id="searchInput" class="search-box" placeholder="ค้นหาชื่อซีรีส์ในหน้านี้..." oninput="handleSearch()">
+    <h1 id="movie-title">กำลังโหลดซีรีส์...</h1>
 
-        <nav>
-            <button class="active" onclick="loadCategory('data.json', 'หน้าแรก / อัปเดตล่าสุด', event)">หน้าแรก</button>
-            <button onclick="loadCategory('vertical.json', 'หนังซีรีส์จอตั้ง', event)">หนังซีรีส์จอตั้ง</button>
-            <button onclick="loadCategory('cinema.json', 'หนังชนโรง', event)">หนังชนโรง</button>
-            <button onclick="loadCategory('series.json', 'ซีรีส์', event)">ซีรีส์</button>
-            <button onclick="loadCategory('anime.json', 'Anime / การ์ตูน', event)">Anime / การ์ตูน</button>
-            <button onclick="loadCategory('adult.json', 'หนัง 18+', event)">หนัง 18+</button>
-        </nav>
-    </header>
-
-    <!-- เนื้อหาหลัก -->
-    <div class="container">
-        <h2 id="sectionTitle" class="section-title">หน้าแรก / อัปเดตล่าสุด</h2>
-        <div id="series-grid" class="grid-container">
-            <!-- ข้อมูลจะถูกโหลดมาแสดงที่นี่ -->
-        </div>
+    <div class="player-container">
+        <video id="video" controls playsinline></video>
     </div>
 
-    <!-- สคริปต์รองรับทั้ง groups และ stations -->
+    <div class="episode-section">
+        <div style="font-size: 0.95rem; margin-bottom: 8px; color: #aaa;">เลือกตอน</div>
+        <div class="episode-grid" id="episode-list"></div>
+    </div>
+
     <script>
-        let allSeries = [];
+        const urlParams = new URLSearchParams(window.location.search);
+        const titleParam = urlParams.get('title') || 'ซีรีส์ของฉัน';
+        document.getElementById('movie-title').innerText = titleParam;
 
-        window.onload = () => {
-            loadCategory('data.json', 'หน้าแรก / อัปเดตล่าสุด');
-        };
+        const video = document.getElementById('video');
+        let currentHls = null;
+        
+        // ** ใส่ URL ของ Cloudflare Worker ของคุณตรงนี้ถูกต้องแล้ว **
+        const proxyBase = 'https://meow-stream-proxy.sarawutocha.workers.dev/?url=';
 
-        function loadCategory(jsonFile, titleText, event) {
-            if (event) {
-                document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
-                event.target.classList.add('active');
+        function playVideo(rawStreamUrl, stationReferer, buttonElement) {
+            document.querySelectorAll('.ep-btn').forEach(btn => btn.classList.remove('active'));
+            if (buttonElement) buttonElement.classList.add('active');
+
+            if (currentHls) {
+                currentHls.destroy();
+                currentHls = null;
             }
 
-            document.getElementById('searchInput').value = '';
-            document.getElementById('sectionTitle').innerText = titleText;
-            const grid = document.getElementById('series-grid');
-            grid.innerHTML = '<div class="no-result">กำลังโหลดข้อมูล...</div>';
+            let finalStreamUrl = rawStreamUrl;
+            let targetReferer = stationReferer || 'https://main.24playerhd.com/';
 
-            fetch(jsonFile)
-                .then(response => {
-                    if (!response.ok) throw new Error("ไม่พบไฟล์ JSON หมวดนี้");
-                    return response.json();
-                })
-                .then(data => {
-                    let processedItems = [];
+            if (!finalStreamUrl.startsWith('http://') && !finalStreamUrl.startsWith('https://')) {
+                finalStreamUrl = 'https://main.24playerhd.com' + (finalStreamUrl.startsWith('/') ? '' : '/') + finalStreamUrl;
+            }
 
-                    // รองรับโครงสร้างแบบ groups (มีหลายตอนย่อยด้านใน)
-                    if (data.groups && Array.isArray(data.groups)) {
-                        data.groups.forEach(group => {
-                            processedItems.push({
-                                name: group.name,
-                                image: group.image,
-                                info: "มี " + (group.stations ? group.stations.length : 0) + " ตอน",
-                                stations: group.stations || []
-                            });
-                        });
-                    } 
-                    // รองรับโครงสร้างแบบ stations (แบบเดิมทีละเรื่อง)
-                    else if (data.stations && Array.isArray(data.stations)) {
-                        data.stations.forEach(station => {
-                            processedItems.push({
-                                name: station.name,
-                                image: station.image,
-                                info: station.info || "ไม่มีข้อมูล",
-                                stations: [station]
-                            });
-                        });
+            let proxyUrl = proxyBase + encodeURIComponent(finalStreamUrl) + '&referer=' + encodeURIComponent(targetReferer);
+
+            if (Hls.isSupported()) {
+                const hls = new Hls({
+                    xhrSetup: function(xhr, url) {
+                        let cleanTargetUrl = url.trim();
+                        if (cleanTargetUrl.includes('workers.dev')) {
+                            try {
+                                const parsed = new URL(cleanTargetUrl);
+                                const originalParam = parsed.searchParams.get('url');
+                                if (originalParam) cleanTargetUrl = decodeURIComponent(originalParam);
+                            } catch (e) {}
+                        }
+                        let subProxyUrl = proxyBase + encodeURIComponent(cleanTargetUrl) + '&referer=' + encodeURIComponent(targetReferer);
+                        xhr.open('GET', subProxyUrl, true);
                     }
-
-                    allSeries = processedItems;
-                    displaySeries(allSeries);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    grid.innerHTML = `<div class="no-result">ยังไม่ได้สร้างไฟล์ ${jsonFile} หรือไม่พบข้อมูลในหมวดนี้</div>`;
                 });
+
+                hls.loadSource(proxyUrl);
+                hls.attachMedia(video);
+                
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play().catch(e => console.log("Auto-play blocked:", e));
+                });
+
+                hls.on(Hls.Events.ERROR, function (event, data) {
+                    if (data.fatal) {
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR: hls.startLoad(); break;
+                            case Hls.ErrorTypes.MEDIA_ERROR: hls.recoverMediaError(); break;
+                            default: hls.destroy(); break;
+                        }
+                    }
+                });
+
+                currentHls = hls;
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = proxyUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play().catch(e => console.log("Auto-play blocked:", e));
+                });
+            }
         }
 
-        function displaySeries(itemsToDisplay) {
-            const grid = document.getElementById('series-grid');
-            grid.innerHTML = '';
+        async function loadEpisodes() {
+            const jsonFiles = ['series.json', 'drama_list.json'];
+            let foundStations = [];
+            const epListContainer = document.getElementById('episode-list');
+            epListContainer.innerHTML = '<div style="color:#aaa; grid-column: 1/-1;">กำลังค้นหาตอน...</div>';
 
-            if (itemsToDisplay.length === 0) {
-                grid.innerHTML = '<div class="no-result">ไม่มีรายการในหมวดหมู่นี้</div>';
+            for (let file of jsonFiles) {
+                try {
+                    let response = await fetch(file);
+                    if (response.ok) {
+                        let data = await response.json();
+                        if (data.groups && Array.isArray(data.groups)) {
+                            let match = data.groups.find(g => g.name.includes(titleParam) || titleParam.includes(g.name));
+                            if (match && match.stations) {
+                                foundStations = match.stations;
+                                break;
+                            }
+                        }
+                    }
+                } catch (e) {}
+            }
+
+            epListContainer.innerHTML = '';
+
+            if (foundStations.length === 0) {
+                epListContainer.innerHTML = '<div style="color:#e50914; grid-column: 1/-1;">ไม่พบลิงก์ซีรีส์นี้</div>';
+                document.getElementById('movie-title').innerText = titleParam + " (ไม่พบข้อมูล)";
                 return;
             }
 
-            itemsToDisplay.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card';
+            let firstButton = null;
+            foundStations.forEach((station, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'ep-btn';
+                btn.innerText = 'EP ' + (index + 1);
                 
-                card.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}">
-                    <div class="card-content">
-                        <h3 class="card-title">${item.name}</h3>
-                        <p class="card-info">${item.info}</p>
-                    </div>
-                `;
-                
-                card.onclick = () => {
-    // ส่งไปแค่ชื่อเรื่องและหมวดหมู่/ไฟล์
-    window.location.href = `player.html?title=${encodeURIComponent(item.name)}`;
-};
-                
-                grid.appendChild(card);
+                btn.onclick = function() {
+                    playVideo(station.url, station.referer, btn);
+                };
+                epListContainer.appendChild(btn);
+
+                if (index === 0) firstButton = btn;
             });
+
+            if (foundStations.length > 0 && firstButton) {
+                playVideo(foundStations[0].url, foundStations[0].referer, firstButton);
+            }
         }
 
-        function handleSearch() {
-            const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
-            const filtered = allSeries.filter(item => {
-                const name = item.name ? item.name.toLowerCase() : '';
-                const info = item.info ? item.info.toLowerCase() : '';
-                return name.includes(keyword) || info.includes(keyword);
-            });
-            displaySeries(filtered);
-        }
+        loadEpisodes();
     </script>
-
 </body>
 </html>
