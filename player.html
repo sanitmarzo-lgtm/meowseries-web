@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MeowSeries External Player</title>
+    <title>MeowSeries Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
             margin: 0;
@@ -26,31 +27,11 @@
             max-width: 900px;
             aspect-ratio: 16/9;
             background: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
             margin-bottom: 15px;
-            text-align: center;
-            padding: 20px;
-            box-sizing: border-box;
         }
-        .app-btn {
-            background-color: #e50914;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            display: inline-block;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            transition: background 0.2s;
-        }
-        .app-btn:hover {
-            background-color: #b20710;
+        video {
+            width: 100%;
+            height: 100%;
         }
         .episode-section {
             width: 100%;
@@ -82,10 +63,7 @@
     <h1 id="movie-title">กำลังโหลด...</h1>
 
     <div class="player-container">
-        <p style="color: #aaa; margin-bottom: 20px; font-size: 0.95rem;">
-            ลิงก์สตรีมนี้มีการป้องกันความปลอดภัยสูง เบราว์เซอร์ไม่สามารถเล่นตรงๆ ได้<br>กรุณากดปุ่มด้านล่างเพื่อเปิดเล่นในแอปภายนอก (Wiseplay / VLC) ได้ทันทีครับ
-        </p>
-        <a id="external-player-btn" href="#" class="app-btn" target="_blank">🚀 เปิดดูในแอป Wiseplay / VLC</a>
+        <video id="video" controls playsinline></video>
     </div>
 
     <div class="episode-section">
@@ -98,16 +76,138 @@
         const titleParam = urlParams.get('title') || 'ซีรีส์ของฉัน';
         document.getElementById('movie-title').innerText = titleParam;
 
+        const video = document.getElementById('video');
+        let currentHls = null;
+        const proxyBase = 'https://meow-stream-proxy.sarawutocha.workers.dev/?url=';
+
         function playVideo(rawStreamUrl, buttonElement) {
             document.querySelectorAll('.ep-btn').forEach(btn => btn.classList.remove('active'));
             if (buttonElement) buttonElement.classList.add('active');
 
+            if (currentHls) {
+                currentHls.destroy();
+                currentHls = null;
+            }
+
             let finalStreamUrl = rawStreamUrl;
+
+            // จัดการแปลงลิงก์ Master Playlist ให้ชี้ตรงไปยังสตรีมภายในอัตโนมัติ
+            if (finalStreamUrl.includes('/newplaylist/')) {
+                let cleanBase = finalStreamUrl.substring(0, finalStreamUrl.lastIndexOf('/'));
+                finalStreamUrl = cleanBase + '/index.m3u8';
+            }
 
             if (!finalStreamUrl.startsWith('http://') && !finalStreamUrl.startsWith('https://')) {
                 if (finalStreamUrl.startsWith('/')) {
                     finalStreamUrl = 'https://main.24playerhd.com' + finalStreamUrl;
                 } else {
+                    finalStreamUrl = 'https://main.24playerhd.com/' + finalStreamUrl;
+                }
+            }
+
+            let proxyUrl = proxyBase + encodeURIComponent(finalStreamUrl) + '&referer=' + encodeURIComponent('https://main.24playerhd.com/');
+
+            if (Hls.isSupported()) {
+                const hls = new Hls({
+                    xhrSetup: function(xhr, url) {
+                        // บังคับให้ทุกการขอชิ้นส่วนย่อย (.ts / .m3u8) วิ่งผ่าน Proxy และแนบสิทธิ์ถูกต้อง
+                        if (url !== proxyUrl && !url.includes('meow-stream-proxy')) {
+                            xhr.open('GET', proxyBase + encodeURIComponent(url) + '&referer=' + encodeURIComponent('https://main.24playerhd.com/'), true);
+                        }
+                    }
+                });
+
+                hls.loadSource(proxyUrl);
+                hls.attachMedia(video);
+                
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play().catch(e => console.log("Play blocked:", e));
+                });
+
+                hls.on(Hls.Events.ERROR, function (event, data) {
+                    if (data.fatal) {
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR: hls.startLoad(); break;
+                            case Hls.ErrorTypes.MEDIA_ERROR: hls.recoverMediaError(); break;
+                            default: hls.destroy(); break;
+                        }
+                    }
+                });
+
+                currentHls = hls;
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = proxyUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play().catch(e => console.log("Play blocked:", e));
+                });
+            }
+        }
+
+        async function loadEpisodes() {
+            const jsonFiles = ['series.json', 'anime.json', 'cinema.json', 'vertical.json', 'adult.json'];
+            let foundStations = [];
+            const epListContainer = document.getElementById('episode-list');
+            epListContainer.innerHTML = '<div style="color:#aaa; grid-column: 1/-1;">กำลังค้นหาตอน...</div>';
+
+            for (let file of jsonFiles) {
+                try {
+                    let response = await fetch(file);
+                    if (response.ok) {
+                        let data = await response.json();
+                        if (data.groups && Array.isArray(data.groups)) {
+                            let match = data.groups.find(g => g.name === titleParam);
+                            if (match && match.stations) {
+                                foundStations = match.stations;
+                                break;
+                            }
+                        }
+                        if (data.stations && Array.isArray(data.stations)) {
+                            let match = data.stations.filter(s => s.name === titleParam);
+                            if (match.length > 0) {
+                                foundStations = match;
+                                break;
+                            }
+                        }
+                    }
+                } catch (e) {}
+            }
+
+            epListContainer.innerHTML = '';
+
+            if (foundStations.length === 0) {
+                epListContainer.innerHTML = '<div style="color:#e50914; grid-column: 1/-1;">ไม่พบข้อมูลสตรีมมิ่ง</div>';
+                document.getElementById('movie-title').innerText = titleParam + " (ไม่พบลิงก์)";
+                return;
+            }
+
+            let firstButton = null;
+            foundStations.forEach((station, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'ep-btn';
+                
+                let epLabel = 'EP ' + (index + 1);
+                if (station.info && !station.info.includes('เสียง')) {
+                    epLabel = station.info.replace('ตอนที่', 'EP');
+                }
+                btn.innerText = epLabel;
+                
+                btn.onclick = function() {
+                    playVideo(station.url, btn);
+                };
+                epListContainer.appendChild(btn);
+
+                if (index === 0) firstButton = btn;
+            });
+
+            if (foundStations.length > 0 && firstButton) {
+                playVideo(foundStations[0].url, firstButton);
+            }
+        }
+
+        loadEpisodes();
+    </script>
+</body>
+</html>
                     finalStreamUrl = 'https://main.24playerhd.com/' + finalStreamUrl;
                 }
             }
