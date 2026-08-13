@@ -78,11 +78,9 @@
 
         const video = document.getElementById('video');
         let currentHls = null;
-        
-        // ใช้ CORS Proxy สาธารณะเพื่อแก้ปัญหาเว็บต้นทางบล็อก
-        const corsProxy = 'https://api.allorigins.win/raw?url=';
+        const proxyBase = 'https://meow-stream-proxy.sarawutocha.workers.dev/?url=';
 
-        function playVideo(rawStreamUrl, buttonElement) {
+        function playVideo(rawStreamUrl, refererUrl, buttonElement) {
             document.querySelectorAll('.ep-btn').forEach(btn => btn.classList.remove('active'));
             if (buttonElement) buttonElement.classList.add('active');
 
@@ -100,11 +98,28 @@
                 }
             }
 
-            const proxiedUrl = corsProxy + encodeURIComponent(finalStreamUrl);
+            const activeReferer = refererUrl || 'https://main.24playerhd.com/';
+            let proxyUrl = proxyBase + encodeURIComponent(finalStreamUrl) + '&referer=' + encodeURIComponent(activeReferer);
 
             if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(proxiedUrl);
+                const hls = new Hls({
+                    xhrSetup: function (xhr, url) {
+                        let absoluteUrl = url;
+                        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                            if (url.startsWith('/')) {
+                                const targetObj = new URL(finalStreamUrl);
+                                absoluteUrl = targetObj.origin + url;
+                            } else {
+                                const baseUrlObj = new URL(finalStreamUrl);
+                                absoluteUrl = new URL(url, baseUrlObj.href).href;
+                            }
+                        }
+                        const finalProxyUrl = proxyBase + encodeURIComponent(absoluteUrl) + '&referer=' + encodeURIComponent(activeReferer);
+                        xhr.open('GET', finalProxyUrl, true);
+                    }
+                });
+
+                hls.loadSource(proxyUrl);
                 hls.attachMedia(video);
                 
                 hls.on(Hls.Events.MANIFEST_PARSED, function() {
@@ -123,7 +138,7 @@
 
                 currentHls = hls;
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = proxiedUrl;
+                video.src = proxyUrl;
                 video.addEventListener('loadedmetadata', function() {
                     video.play().catch(e => console.log("Play blocked:", e));
                 });
@@ -179,7 +194,7 @@
                 btn.innerText = epLabel;
                 
                 btn.onclick = function() {
-                    playVideo(station.url, btn);
+                    playVideo(station.url, station.referer, btn);
                 };
                 epListContainer.appendChild(btn);
 
@@ -187,7 +202,7 @@
             });
 
             if (foundStations.length > 0 && firstButton) {
-                playVideo(foundStations[0].url, firstButton);
+                playVideo(foundStations[0].url, foundStations[0].referer, firstButton);
             }
         }
 
