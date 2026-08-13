@@ -3,26 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Meow Player</title>
-    <!-- โหลดไลบรารี HLS.js สำหรับเล่นไฟล์วิดีโอ .m3u8 -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body style="background: #111; color: #fff; font-family: sans-serif; text-align: center; margin-top: 50px;">
 
     <h2>ระบบเล่นวิดีโอผ่าน PHP Proxy</h2>
     
-    <!-- ตัวเล่นวิดีโอ -->
     <div>
         <video id="video" controls autoplay style="width: 80%; max-width: 800px; background: #000; border-radius: 8px;"></video>
     </div>
 
     <script>
-        // ลิงก์ PHP Proxy ของคุณบน InfinityFree
         const proxyBase = 'http://meowstream.gamer.gd/proxy.php?url=';
 
-        // ⚠️ ใส่ลิงก์สตรีม .m3u8 ที่คุณต้องการเล่นตรงนี้ได้เลย
-        const targetVideoUrl = 'https://example.com/path/to/playlist.m3u8'; 
+        // 🟢 ลิงก์สตรีม .m3u8 ของคุณถูกใส่ไว้ตรงนี้เรียบร้อยแล้ว
+        const targetVideoUrl = 'https://raw.githubusercontent.com/stream-test/test-streams/main/x1hou/playlist.m3u8'; 
 
-        // รวมร่างลิงก์ผ่าน Proxy อัตโนมัติ
         const finalVideoUrl = proxyBase + encodeURIComponent(targetVideoUrl);
 
         const video = document.getElementById('video');
