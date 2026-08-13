@@ -106,8 +106,14 @@
                 const hls = new Hls({
                     xhrSetup: function(xhr, url) {
                         let cleanTargetUrl = url.trim();
-                        if (cleanTargetUrl.endsWith('%2F')) {
-                            cleanTargetUrl = cleanTargetUrl.slice(0, -3);
+                        if (cleanTargetUrl.includes('meow-stream-proxy.sarawutocha.workers.dev')) {
+                            try {
+                                const parsed = new URL(cleanTargetUrl);
+                                const originalParam = parsed.searchParams.get('url');
+                                if (originalParam) {
+                                    cleanTargetUrl = decodeURIComponent(originalParam);
+                                }
+                            } catch (e) {}
                         }
                         let subProxyUrl = proxyBase + encodeURIComponent(cleanTargetUrl) + '&referer=' + encodeURIComponent(targetReferer);
                         xhr.open('GET', subProxyUrl, true);
