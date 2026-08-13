@@ -2,199 +2,45 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MeowSeries Player</title>
+    <title>Meow Player</title>
+    <!-- โหลดไลบรารี HLS.js สำหรับเล่นไฟล์วิดีโอ .m3u8 -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <style>
-        body {
-            margin: 0;
-            background-color: #141414;
-            color: #ffffff;
-            font-family: sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 10px;
-        }
-        h1 {
-            font-size: 1.1rem;
-            margin: 10px 0;
-            text-align: center;
-        }
-        .player-container {
-            width: 100%;
-            max-width: 800px;
-            aspect-ratio: 16/9;
-            background: #000;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        video {
-            width: 100%;
-            height: 100%;
-        }
-        .episode-section {
-            width: 100%;
-            max-width: 800px;
-        }
-        .episode-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-            gap: 8px;
-            max-height: 40vh;
-            overflow-y: auto;
-            padding-bottom: 20px;
-        }
-        .ep-btn {
-            background-color: #2f2f2f;
-            color: white;
-            border: none;
-            padding: 10px 5px;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.85rem;
-        }
-        .ep-btn.active {
-            background-color: #e50914;
-        }
-    </style>
 </head>
-<body>
+<body style="background: #111; color: #fff; font-family: sans-serif; text-align: center; margin-top: 50px;">
 
-    <h1 id="movie-title">กำลังโหลดซีรีส์...</h1>
-
-    <div class="player-container">
-        <video id="video" controls playsinline></video>
-    </div>
-
-    <div class="episode-section">
-        <div style="font-size: 0.95rem; margin-bottom: 8px; color: #aaa;">เลือกตอน</div>
-        <div class="episode-grid" id="episode-list"></div>
+    <h2>ระบบเล่นวิดีโอผ่าน PHP Proxy</h2>
+    
+    <!-- ตัวเล่นวิดีโอ -->
+    <div>
+        <video id="video" controls autoplay style="width: 80%; max-width: 800px; background: #000; border-radius: 8px;"></video>
     </div>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const titleParam = urlParams.get('title') || 'ซีรีส์ของฉัน';
-        
+        // ลิงก์ PHP Proxy ของคุณบน InfinityFree
+        const proxyBase = 'http://meowstream.gamer.gd/proxy.php?url=';
+
+        // ⚠️ ใส่ลิงก์สตรีม .m3u8 ที่คุณต้องการเล่นตรงนี้ได้เลย
+        const targetVideoUrl = 'https://example.com/path/to/playlist.m3u8'; 
+
+        // รวมร่างลิงก์ผ่าน Proxy อัตโนมัติ
+        const finalVideoUrl = proxyBase + encodeURIComponent(targetVideoUrl);
+
         const video = document.getElementById('video');
-        let currentHls = null;
-        
-        const proxyBase = 'https://meow-stream-proxy.sarawutocha.workers.dev/?url=';
 
-        function playVideo(rawStreamUrl, stationReferer, buttonElement) {
-            document.querySelectorAll('.ep-btn').forEach(btn => btn.classList.remove('active'));
-            if (buttonElement) buttonElement.classList.add('active');
-
-            if (currentHls) {
-                currentHls.destroy();
-                currentHls = null;
-            }
-
-            let finalStreamUrl = rawStreamUrl;
-            let targetReferer = stationReferer || 'https://main.24playerhd.com/';
-
-            if (!finalStreamUrl.startsWith('http://') && !finalStreamUrl.startsWith('https://')) {
-                let baseOrigin = new URL(targetReferer).origin;
-                finalStreamUrl = baseOrigin + (finalStreamUrl.startsWith('/') ? '' : '/') + finalStreamUrl;
-            }
-
-            let proxyUrl = proxyBase + encodeURIComponent(finalStreamUrl) + '&referer=' + encodeURIComponent(targetReferer);
-
-            if (Hls.isSupported()) {
-                const hls = new Hls({
-                    xhrSetup: function(xhr, url) {
-                        let cleanTargetUrl = url.trim();
-                        
-                        // ถ้า Hls.js พยายามโหลดซับเพลย์ลิสต์ ให้แปลงเป็นAbsolute URL เทียบกับไฟล์หลัก
-                        if (!cleanTargetUrl.startsWith('http://') && !cleanTargetUrl.startsWith('https://')) {
-                            let baseUri = new URL(finalStreamUrl);
-                            cleanTargetUrl = new URL(cleanTargetUrl, baseUri).href;
-                        }
-
-                        // ส่งผ่าน Worker แบบตรงๆ ไม่ซ้อนทับ
-                        let directProxyUrl = proxyBase + encodeURIComponent(cleanTargetUrl) + '&referer=' + encodeURIComponent(targetReferer);
-                        xhr.open('GET', directProxyUrl, true);
-                    }
-                });
-
-                hls.loadSource(proxyUrl);
-                hls.attachMedia(video);
-                
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(e => console.log("Auto-play blocked:", e));
-                });
-
-                hls.on(Hls.Events.ERROR, function (event, data) {
-                    if (data.fatal) {
-                        switch (data.type) {
-                            case Hls.ErrorTypes.NETWORK_ERROR: hls.startLoad(); break;
-                            case Hls.ErrorTypes.MEDIA_ERROR: hls.recoverMediaError(); break;
-                            default: hls.destroy(); break;
-                        }
-                    }
-                });
-
-                currentHls = hls;
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = proxyUrl;
-                video.addEventListener('loadedmetadata', function() {
-                    video.play().catch(e => console.log("Auto-play blocked:", e));
-                });
-            }
-        }
-
-        async function loadEpisodes() {
-            const jsonFile = urlParams.get('file') || 'series.json';
-            let foundStations = [];
-            const epListContainer = document.getElementById('episode-list');
-            epListContainer.innerHTML = '<div style="color:#aaa; grid-column: 1/-1;">กำลังค้นหาตอน...</div>';
-
-            try {
-                let response = await fetch(jsonFile);
-                if (response.ok) {
-                    let data = await response.json();
-                    if (data.groups && Array.isArray(data.groups) && data.groups.length > 0) {
-                        let match = data.groups[0];
-                        if (match && match.stations) {
-                            foundStations = match.stations;
-                            document.getElementById('movie-title').innerText = match.name || 'ซีรีส์ของฉัน';
-                        }
-                    }
-                }
-            } catch (e) {}
-
-            epListContainer.innerHTML = '';
-
-            if (foundStations.length === 0) {
-                epListContainer.innerHTML = '<div style="color:#e50914; grid-column: 1/-1;">ไม่พบลิงก์ในไฟล์นี้</div>';
-                document.getElementById('movie-title').innerText = "ไม่พบข้อมูล";
-                return;
-            }
-
-            let firstButton = null;
-            foundStations.forEach((station, index) => {
-                const btn = document.createElement('button');
-                btn.className = 'ep-btn';
-                btn.innerText = 'EP ' + (index + 1);
-                
-                btn.onclick = function() {
-                    playVideo(station.url, station.referer, btn);
-                };
-                epListContainer.appendChild(btn);
-
-                if (index === 0) firstButton = btn;
+        if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(finalVideoUrl);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play();
             });
-
-            if (foundStations.length > 0 && firstButton) {
-                playVideo(foundStations[0].url, foundStations[0].referer, firstButton);
-            }
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = finalVideoUrl;
+            video.addEventListener('loadedmetadata', function() {
+                video.play();
+            });
         }
-
-        loadEpisodes();
     </script>
+
 </body>
 </html>
