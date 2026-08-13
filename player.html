@@ -33,19 +33,6 @@
             width: 100%;
             height: 100%;
         }
-        #debug-log {
-            width: 100%;
-            max-width: 900px;
-            background: #1e1e1e;
-            color: #ff5555;
-            padding: 10px;
-            font-size: 0.8rem;
-            margin-bottom: 15px;
-            border-radius: 4px;
-            word-break: break-all;
-            max-height: 100px;
-            overflow-y: auto;
-        }
         .episode-section {
             width: 100%;
             max-width: 900px;
@@ -79,21 +66,12 @@
         <video id="video" controls playsinline></video>
     </div>
 
-    <!-- กล่องโชว์ Error บนมือถือ -->
-    <div id="debug-log">สถานะ: รอโหลดวิดีโอ...</div>
-
     <div class="episode-section">
         <div style="font-size: 1rem; margin-bottom: 8px;">เลือกตอน</div>
         <div class="episode-grid" id="episode-list"></div>
     </div>
 
     <script>
-        const logBox = document.getElementById('debug-log');
-        function showLog(msg) {
-            console.log(msg);
-            logBox.innerText = "Log: " + msg;
-        }
-
         const urlParams = new URLSearchParams(window.location.search);
         const titleParam = urlParams.get('title') || 'ซีรีส์ของฉัน';
         document.getElementById('movie-title').innerText = titleParam;
@@ -114,13 +92,12 @@
             let finalStreamUrl = rawStreamUrl;
             if (!finalStreamUrl.startsWith('http://') && !finalStreamUrl.startsWith('https://')) {
                 if (finalStreamUrl.startsWith('/')) {
-                    finalStreamUrl = 'https://m35.999play4.com' + finalStreamUrl;
+                    finalStreamUrl = 'https://main.24playerhd.com' + finalStreamUrl;
                 } else {
-                    finalStreamUrl = 'https://m35.999play4.com/' + finalStreamUrl;
+                    finalStreamUrl = 'https://main.24playerhd.com/' + finalStreamUrl;
                 }
             }
 
-            showLog("กำลังโหลด: " + finalStreamUrl);
             const proxyUrl = proxyBase + encodeURIComponent(finalStreamUrl);
 
             if (Hls.isSupported()) {
@@ -132,7 +109,9 @@
                                 const targetObj = new URL(finalStreamUrl);
                                 absoluteUrl = targetObj.origin + url;
                             } else if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                                absoluteUrl = new URL(url, finalStreamUrl).href;
+                                const baseUrlObj = new URL(finalStreamUrl);
+                                const baseDir = baseUrlObj.pathname.substring(0, baseUrlObj.pathname.lastIndexOf('/') + 1);
+                                absoluteUrl = baseUrlObj.origin + baseDir + url;
                             }
                             url = proxyBase + encodeURIComponent(absoluteUrl);
                         }
@@ -144,113 +123,7 @@
                 hls.attachMedia(video);
                 
                 hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    showLog("โหลด Manifest สำเร็จ กำลังเล่น...");
-                    video.play().catch(e => showLog("Play Error: " + e.message));
-                });
-
-                hls.on(Hls.Events.ERROR, function (event, data) {
-                    showLog(`HLS Error: ${data.type} - ${data.details}`);
-                    if (data.fatal) {
-                        switch (data.type) {
-                            case Hls.ErrorTypes.NETWORK_ERROR: hls.startLoad(); break;
-                            case Hls.ErrorTypes.MEDIA_ERROR: hls.recoverMediaError(); break;
-                            default: hls.destroy(); break;
-                        }
-                    }
-                });
-
-                currentHls = hls;
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = proxyUrl;
-                video.addEventListener('loadedmetadata', function() {
-                    video.play().catch(e => showLog("Native Play Error: " + e.message));
-                });
-            }
-        }
-
-        async function loadEpisodes() {
-            const jsonFiles = ['series.json', 'anime.json', 'cinema.json', 'vertical.json', 'adult.json'];
-            let foundStations = [];
-            const epListContainer = document.getElementById('episode-list');
-            epListContainer.innerHTML = '<div style="color:#aaa; grid-column: 1/-1;">กำลังค้นหาตอน...</div>';
-
-            for (let file of jsonFiles) {
-                try {
-                    let response = await fetch(file);
-                    if (response.ok) {
-                        let data = await response.json();
-                        if (data.groups && Array.isArray(data.groups)) {
-                            let match = data.groups.find(g => g.name === titleParam);
-                            if (match && match.stations) {
-                                foundStations = match.stations;
-                                break;
-                            }
-                        }
-                        if (data.stations && Array.isArray(data.stations)) {
-                            let match = data.stations.filter(s => s.name === titleParam);
-                            if (match.length > 0) {
-                                foundStations = match;
-                                break;
-                            }
-                        }
-                    }
-                } catch (e) {}
-            }
-
-            epListContainer.innerHTML = '';
-
-            if (foundStations.length === 0) {
-                epListContainer.innerHTML = '<div style="color:#e50914; grid-column: 1/-1;">ไม่พบข้อมูลสตรีมมิ่ง</div>';
-                document.getElementById('movie-title').innerText = titleParam + " (ไม่พบลิงก์)";
-                showLog("ไม่พบข้อมูลสตรีมมิ่งในไฟล์ JSON");
-                return;
-            }
-
-            let firstButton = null;
-            foundStations.forEach((station, index) => {
-                const btn = document.createElement('button');
-                btn.className = 'ep-btn';
-                
-                let epLabel = 'EP ' + (index + 1);
-                if (station.info && !station.info.includes('เสียง')) {
-                    epLabel = station.info.replace('ตอนที่', 'EP');
-                }
-                btn.innerText = epLabel;
-                
-                btn.onclick = function() {
-                    playVideo(station.url, btn);
-                };
-                epListContainer.appendChild(btn);
-
-                if (index === 0) firstButton = btn;
-            });
-
-            if (foundStations.length > 0 && firstButton) {
-                playVideo(foundStations[0].url, firstButton);
-            }
-        }
-
-        loadEpisodes();
-    </script>
-</body>
-</html>
-                            if (url.startsWith('/')) {
-                                const targetObj = new URL(finalStreamUrl);
-                                absoluteUrl = targetObj.origin + url;
-                            } else if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                                absoluteUrl = new URL(url, finalStreamUrl).href;
-                            }
-                            url = proxyBase + encodeURIComponent(absoluteUrl);
-                        }
-                        xhr.open('GET', url, true);
-                    }
-                });
-
-                hls.loadSource(proxyUrl);
-                hls.attachMedia(video);
-                
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(e => console.log("Play blocked on mobile:", e));
+                    video.play().catch(e => console.log("Play blocked:", e));
                 });
 
                 hls.on(Hls.Events.ERROR, function (event, data) {
