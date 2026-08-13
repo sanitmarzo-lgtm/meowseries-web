@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MeowSeries Player</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
             margin: 0;
@@ -28,10 +27,13 @@
             aspect-ratio: 16/9;
             background: #000;
             margin-bottom: 15px;
+            border-radius: 8px;
+            overflow: hidden;
         }
-        video {
+        iframe {
             width: 100%;
             height: 100%;
+            border: none;
         }
         .episode-section {
             width: 100%;
@@ -63,7 +65,8 @@
     <h1 id="movie-title">กำลังโหลด...</h1>
 
     <div class="player-container">
-        <video id="video" controls playsinline></video>
+        <!-- ใช้ Iframe ฝังตัวเล่นสำเร็จรูป ตัดปัญหาจอดำและโค้ดพัง -->
+        <iframe id="video-frame" src="" allowfullscreen></iframe>
     </div>
 
     <div class="episode-section">
@@ -76,18 +79,11 @@
         const titleParam = urlParams.get('title') || 'ซีรีส์ของฉัน';
         document.getElementById('movie-title').innerText = titleParam;
 
-        const video = document.getElementById('video');
-        let currentHls = null;
-        const proxyBase = 'https://meow-stream-proxy.sarawutocha.workers.dev/?url=';
+        const videoFrame = document.getElementById('video-frame');
 
-        function playVideo(rawStreamUrl, refererUrl, buttonElement) {
+        function playVideo(rawStreamUrl, buttonElement) {
             document.querySelectorAll('.ep-btn').forEach(btn => btn.classList.remove('active'));
             if (buttonElement) buttonElement.classList.add('active');
-
-            if (currentHls) {
-                currentHls.destroy();
-                currentHls = null;
-            }
 
             let finalStreamUrl = rawStreamUrl;
             if (!finalStreamUrl.startsWith('http://') && !finalStreamUrl.startsWith('https://')) {
@@ -98,58 +94,8 @@
                 }
             }
 
-            // แนบ referer ไปกับ Proxy ด้วยถ้ามี
-            let proxyUrl = proxyBase + encodeURIComponent(finalStreamUrl);
-            if (refererUrl) {
-                proxyUrl += '&referer=' + encodeURIComponent(refererUrl);
-            }
-
-            if (Hls.isSupported()) {
-                const hlsConfig = {
-                    xhrSetup: function (xhr, url) {
-                        if (!url.includes('meow-stream-proxy.sarawutocha.workers.dev')) {
-                            let absoluteUrl = url;
-                            if (url.startsWith('/')) {
-                                const targetObj = new URL(finalStreamUrl);
-                                absoluteUrl = targetObj.origin + url;
-                            } else if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                                const baseUrlObj = new URL(finalStreamUrl);
-                                absoluteUrl = new URL(url, baseUrlObj.href).href;
-                            }
-                            url = proxyBase + encodeURIComponent(absoluteUrl);
-                            if (refererUrl) {
-                                url += '&referer=' + encodeURIComponent(refererUrl);
-                            }
-                        }
-                        xhr.open('GET', url, true);
-                    }
-                };
-
-                const hls = new Hls(hlsConfig);
-                hls.loadSource(proxyUrl);
-                hls.attachMedia(video);
-                
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(e => console.log("Play blocked:", e));
-                });
-
-                hls.on(Hls.Events.ERROR, function (event, data) {
-                    if (data.fatal) {
-                        switch (data.type) {
-                            case Hls.ErrorTypes.NETWORK_ERROR: hls.startLoad(); break;
-                            case Hls.ErrorTypes.MEDIA_ERROR: hls.recoverMediaError(); break;
-                            default: hls.destroy(); break;
-                        }
-                    }
-                });
-
-                currentHls = hls;
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = proxyUrl;
-                video.addEventListener('loadedmetadata', function() {
-                    video.play().catch(e => console.log("Play blocked:", e));
-                });
-            }
+            // ส่งลิงก์เข้า Player สำเร็จรูปผ่าน iframe เล่นได้ทันทีในหน้าเว็บ
+            videoFrame.src = "https://hls-player.net/embed.php?url=" + encodeURIComponent(finalStreamUrl);
         }
 
         async function loadEpisodes() {
@@ -201,7 +147,7 @@
                 btn.innerText = epLabel;
                 
                 btn.onclick = function() {
-                    playVideo(station.url, station.referer, btn);
+                    playVideo(station.url, btn);
                 };
                 epListContainer.appendChild(btn);
 
@@ -209,7 +155,7 @@
             });
 
             if (foundStations.length > 0 && firstButton) {
-                playVideo(foundStations[0].url, foundStations[0].referer, firstButton);
+                playVideo(foundStations[0].url, firstButton);
             }
         }
 
