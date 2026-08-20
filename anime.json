@@ -1,1 +1,108 @@
-
+{
+"name": "Anime พากย์ไทย",
+"groups": [
+{
+    "name": "Tongari Boushi no Atelier จอมเวทฝึกหัดกับหมวกมหัศจรรย์ (จบแล้ว)",
+            "image": "https://indy-anime.net/wp-content/uploads/2026/06/Tongari-Boushi-no-Atelier.jpg",
+            "stations": [
+                {
+                    "name": "ตอนที่ 13",
+                    "image": "https://indy-anime.net/wp-content/uploads/2026/06/Tongari-Boushi-no-Atelier.jpg",
+                    "url": "https://hls.animeindy.com:8443/vid/kyR2YQbKiH/video.mp4/playlist.m3u8",
+                    "referer": "https://indy-anime.net/"
+                },
+                {
+                    "name": "ตอนที่ 12",
+                    "image": "https://indy-anime.net/wp-content/uploads/2026/06/Tongari-Boushi-no-Atelier.jpg",
+                    "url": "https://hls.animeindy.com:8443/vid/Ullv8d9YC/video.mp4/playlist.m3u8",
+                    "referer": "https://indy-anime.net/"
+                },
+                {
+                    "name": "ตอนที่ 11",
+                    "image": "https://indy-anime.net/wp-content/uploads/2026/06/Tongari-Boushi-no-Atelier.jpg",
+                    "url": "https://hls.animeindy.com:8443/vid/GdXnzutZm4/video.mp4/playlist.m3u8",
+                    "referer": "https://indy-anime.net/"
+                },
+                {
+                    "name": "ตอนที่ 10",
+                    "image": "https://indy-anime.net/wp-content/uploads/2026/06/Tongari-Boushi-no-Atelier.jpg",
+                    "url": "https://hls.animeindy.com:8443/vid/APee0mX8D/video.mp4/playlist.m3u8",
+                    "referer": "https://indy-anime.net/"
+                },
+                {
+                    "name": "ตอนที่ 9",
+                    "image": "https://indy-anime.net/wp-content/uploads/2026/06/Tongari-Boushi-no-Atelier.jpg",
+                    "url": "https://hls.animeindy.com:8443/vid/FqtyJXabTq/video.mp4/playlist.m3u8",
+                    "referer": "https://indy-anime.net/"
+                },
+                {
+                    "name": "ตอนที่ 8",
+                    "image": "https://indy-anime.net/wp-content/uploads/2026/06/Tongari-Boushi-no-Atelier.jpg",
+                    "url": "https://hls.animeindy.com:8443/vid/W8nWqP8LAN/video.mp4/playlist.m3u8",
+                    "referer": "https://indy-anime.net/"
+                },
+                {
+                    "name": "ตอนที่ 7",
+                    "image": "https://indy-anime.net/wp-content/uploads/2026/06/Tongari-Boushi-no-Atelier.jpg",
+                    "url": "https://hls.animeindy.com:8443/vid/2CtrbuxN2r/video.mp4/playlist.m3u8",
+                    "referer": "https://indy-anime.net/"
+                },
+                {
+                    "name": "ตอนที่ 6",
+                    "image": "https://indy-anime.net/wp-content/uploads/2026/06/Tongari-Boushi-no-Atelier.jpg",
+                    "url": "https://hls.animeindy.com:8443/vid/PxOy0klxB1/video.mp4/playlist.m3u8",
+                    "referer": "https://indy-anime.net/"
+                },
+                {
+                    "name": "ตอนที่ 5",
+                    "image": "https://indy-anime.net/wp-content/uploads/2026/06/Tongari-Boushi-no-Atelier.jpg",
+                    "url": "https://hls.animeindy.com:8443/vid/GsoxOcyxBo/video.mp4/playlist.m3u8",
+                    "referer": "https://indy-anime.net/"
+                },
+                {
+                    "name": "ตอนที่ 4",
+                    "image": "https://indy-anime.net/wp-content/uploads/2026/06/Tongari-Boushi-no-Atelier.jpg",
+                    "url": "https://hls.animeindy.com:8443/vid/1Rrx9GD89X/video.mp4/playlist.m3u8",
+                    "referer": "https://indy-anime.net/"
+                },
+                {
+                    "name": "ตอนที่ 3",
+                    "image": "https://indy-anime.net/wp-content/uploads/2026/06/Tongari-Boushi-no-Atelier.jpg",
+                    "url": "https://hls.animeindy.com:8443/vid/ELteFRrpX/video.mp4/playlist.m3u8",
+                    "referer": "https://indy-anime.net/"
+                },
+                {
+                    "name": "ตอนที่ 2",
+                    "image": "https://indy-anime.net/wp-content/uploads/2026/06/Tongari-Boushi-no-Atelier.jpg",
+                    "url": "https://hls.animeindy.com:8443/vid/vSveGojUi/video.mp4/playlist.m3u8",
+                    "referer": "https://indy-anime.net/"
+                },
+                {
+                    "name": "ตอนที่ 1",
+                    "image": "https://indy-anime.net/wp-content/uploads/2026/06/Tongari-Boushi-no-Atelier.jpg",
+                    "url": "https://hls.animeindy.com:8443/vid/Dhjw4i57Dg/video.mp4/playlist.m3u8",
+                    "referer": "https://indy-anime.net/"
+                }
+            ]
+        },
+        {
+            "name": "Nijusseiki Denki Mokuroku: Eureka Evrika ประกายฝัน",
+            "image": "https://indy-anime.net/wp-content/uploads/2026/07/Nijusseiki-Denki-Mokuroku.jpg",
+            "stations": [
+                {
+                    "name": "ตอนที่ 3",
+                    "image": "https://indy-anime.net/wp-content/uploads/2026/07/Nijusseiki-Denki-Mokuroku.jpg",
+                    "url": "https://hls.animeindy.com:8443/vid/PPkuTvfom8/video.mp4/playlist.m3u8",
+                    "referer": "https://indy-anime.net/"
+                },
+                {
+                    "name": "ตอนที่ 2",
+                    "image": "https://indy-anime.net/wp-content/uploads/2026/07/Nijusseiki-Denki-Mokuroku.jpg",
+                    "url": "https://hls.animeindy.com:8443/vid/JiBLStnw27/video.mp4/playlist.m3u8",
+                    "referer": "https://indy-anime.net/"
+                },
+                {
+                    "name": "ตอนที่ 1",
+                    "image": "https://indy-anime.net/wp-content/uploads/2026/07/Nijusseiki-Denki-Mokuroku.jpg",
+                    "url": "https://hls.animeindy.com:8443/vid/F9yBrN1b5/video.mp4/playlist.m3u8",
+                    "referer": "https://indy-anime.net/"
