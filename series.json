@@ -12,7 +12,8 @@
           "image": "https://s359.kapook.com/pagebuilder/ce1f0901-1693-42c2-9bab-d7210e014f96.jpg",
           "info": "เสียง : ไทย ",
           "url": "https://vdohls.com/W_UvVgT-mWAKo/playlist.m3u8",
-          "referer": "https://vdohls.com/"
+          "Referer": "https://vdohls.com/",
+      "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
         },
         {
           "name": "รักติดหนึบ EP 2",
@@ -94,6 +95,40 @@
       ]
     },
     {
+      "name": "Teach You a Lesson (2026) อย่างนี้ต้องโดนสั่งสอน ตอน 1-10",
+            "image": "https://ok24hd.com/wp-content/uploads/2026/06/Teach-You-a-Lesson-2026.webp",
+            "stations": [
+                {
+                    "name": "ตอนที่ 1",
+                    "image": "https://ok24hd.com/wp-content/uploads/2026/06/Teach-You-a-Lesson-2026.webp",
+                    "info": "พากย์ไทย",
+                    "url": "https://vdohls.com/h1-9G_neQZS8w/playlist.m3u8",
+                    "referer": "https://vdohls.com/"
+                },
+                {
+                    "name": "ตอนที่ 2",
+                    "image": "https://ok24hd.com/wp-content/uploads/2026/06/Teach-You-a-Lesson-2026.webp",
+                    "info": "พากย์ไทย",
+                    "url": "https://vdohls.com/fZzB-mjXj_udq/playlist.m3u8",
+                    "referer": "https://vdohls.com/"
+                },
+                {
+                    "name": "ตอนที่ 3",
+                    "image": "https://ok24hd.com/wp-content/uploads/2026/06/Teach-You-a-Lesson-2026.webp",
+                    "info": "พากย์ไทย",
+                    "url": "https://vdohls.com/Bfy-vQa_yP3by/playlist.m3u8",
+                    "referer": "https://vdohls.com/"
+                },
+                {
+                    "name": "ตอนที่ 4",
+                    "image": "https://ok24hd.com/wp-content/uploads/2026/06/Teach-You-a-Lesson-2026.webp",
+                    "info": "พากย์ไทย",
+                    "url": "https://vdohls.com/pLk_PB-51xBWG/playlist.m3u8",
+                    "referer": "https://vdohls.com/"
+                 }
+                ]
+              },
+              {
       "name": "Our Dazzling Days (2026) วันที่เปล่งประกายของสองเรา (จบแล้ว)",
       "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
       "stations": [
