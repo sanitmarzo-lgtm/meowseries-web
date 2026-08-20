@@ -1,6 +1,4 @@
 {
-  "latest_version": "1.0.1",
-  "min_supported_version": "1.0.0",
-  "update_url": "https://github.com/sanitmarzo-lgtm/meowseries-web/releases",
-  "update_message": "แอปเวอร์ชันนี้เก่าเกินไปแล้ว กรุณาอัปเดตเวอร์ชันใหม่เพื่อใช้งานต่อครับ"
+  "min_version": "1.0.1",
+  "update_url": "https://yourwebsite.com/download.html"
 }
