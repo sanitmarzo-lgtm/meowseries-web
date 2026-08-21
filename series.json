@@ -1,8 +1,194 @@
 {
-  "name": "ซีรีย์ พากย์ไทย",
-  "author": "ซีรีย์อัพเพิ้มใหม่ จาก บน ลง ล่าง",
-  "password": "123456",
   "groups": [
+    {
+      "name": "A Shop for Killers (2026) ร้านลับนักฆ่า Season 2",
+"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
+"stations": [
+{
+"name": "ร้านลับนักฆ่า Season 2 EP 1",
+"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/f7cc0c60ab7b0b528fb8251f/f7cc0c60ab7b0b528fb8251f.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ร้านลับนักฆ่า Season 2 EP 2",
+"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/2a90782a4df05d157c73fb2c/2a90782a4df05d157c73fb2c.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ร้านลับนักฆ่า Season 2 EP 3",
+"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/91f04d5887a8abfd3dba8ee8/91f04d5887a8abfd3dba8ee8.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ร้านลับนักฆ่า Season 2 EP 4",
+"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/f3cb8858a2f14f74ad0ce4a0/f3cb8858a2f14f74ad0ce4a0.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ร้านลับนักฆ่า Season 2 EP 5",
+"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/f1ab5441406ec17237bf25eb/f1ab5441406ec17237bf25eb.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ร้านลับนักฆ่า Season 2 EP 6",
+"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/5794de9309e56d97485c6d2d/5794de9309e56d97485c6d2d.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ร้านลับนักฆ่า Season 2 EP 7",
+"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/39c38cb18a707aac99547e1d/39c38cb18a707aac99547e1d.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ร้านลับนักฆ่า Season 2 EP 8",
+"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/f30b44831a6124ab5a71e8a0/f30b44831a6124ab5a71e8a0.m3u8",
+"referer": "https://main.24playerhd.com/"
+              }
+      ]
+    },
+    {
+      "name": "A Shop for Killers (2024) มรดกร้านนักฆ่า Season 1",
+"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
+"stations": [
+{
+"name": "มรดกร้านนักฆ่า Season 1 EP 1",
+"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/881f99f17263f1c06be00d49/881f99f17263f1c06be00d49.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "มรดกร้านนักฆ่า Season 1 EP 2",
+"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/593f1f276aa9baf0d776ca9c/593f1f276aa9baf0d776ca9c.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "มรดกร้านนักฆ่า Season 1 EP 3",
+"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/dfbac223bd849024ea85ea71/dfbac223bd849024ea85ea71.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "มรดกร้านนักฆ่า Season 1 EP 4",
+"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/c97cdbb0b2d48e78bed6e23c/c97cdbb0b2d48e78bed6e23c.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "มรดกร้านนักฆ่า Season 1 EP 5",
+"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/0462321ded80306b580d2b96/0462321ded80306b580d2b96.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "มรดกร้านนักฆ่า Season 1 EP 6",
+"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/3f9f989edff7da3f232dd30c/3f9f989edff7da3f232dd30c.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "มรดกร้านนักฆ่า Season 1 EP 7",
+"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/c07fc52755c8166e4eecfb59/c07fc52755c8166e4eecfb59.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "มรดกร้านนักฆ่า Season 1 EP 8",
+"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/a66795e46375c6bb09f5b845/a66795e46375c6bb09f5b845.m3u8",
+"referer": "https://main.24playerhd.com/"
+              }
+      ]
+    },
+    {
+"name": "The Apartment Job (2026) ท่านประธานกำมะลอ",
+"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
+"stations": [
+{
+"name": "ท่านประธานกำมะลอ EP 1",
+"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/d3350ca28c98b8cde88f98dd/d3350ca28c98b8cde88f98dd.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ท่านประธานกำมะลอ EP 2",
+"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/9154384ea9cb995655b4d27e/9154384ea9cb995655b4d27e.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ท่านประธานกำมะลอ EP 3",
+"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/c990e7c1cbf4709e1e9b244c/c990e7c1cbf4709e1e9b244c.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ท่านประธานกำมะลอ EP 4",
+"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/4b8dfc036d83683a0a65a2c6/4b8dfc036d83683a0a65a2c6.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ท่านประธานกำมะลอ EP 5",
+"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/4f139a150b6468553efcf153/4f139a150b6468553efcf153.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ท่านประธานกำมะลอ EP 6",
+"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/1f895286cd77c0c05abcb2b9/1f895286cd77c0c05abcb2b9.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ท่านประธานกำมะลอ EP 7",
+"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/5a520fc8870d6959c36ffd57/5a520fc8870d6959c36ffd57.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ท่านประธานกำมะลอ EP 8",
+"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/199e3ac143a7cfe27b754674/199e3ac143a7cfe27b754674.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ท่านประธานกำมะลอ EP 9",
+"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/05acf14cc54ef2280f7e5835/05acf14cc54ef2280f7e5835.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ท่านประธานกำมะลอ EP 10",
+"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/d7bb3a611a9629e048908326/d7bb3a611a9629e048908326.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ท่านประธานกำมะลอ EP 11",
+"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/eca3c53aff072e89b09f742b/eca3c53aff072e89b09f742b.m3u8",
+"referer": "https://main.24playerhd.com/"},
+{
+"name": "ท่านประธานกำมะลอ EP 12",
+"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
+"info": "เสียง : ไทย ",
+"url": "https://main.24playerhd.com/newplaylist/627a34d7d98989cb703e2d46/627a34d7d98989cb703e2d46.m3u8",
+"referer": "https://main.24playerhd.com/"
+             }
+      ]
+    },
     {
       "name": "Our Sticky Love (2026) รักติดหนึบ",
       "image": "https://s359.kapook.com/pagebuilder/ce1f0901-1693-42c2-9bab-d7210e014f96.jpg",
