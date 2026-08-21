@@ -1,6 +1,4 @@
 {
-"name": "หนัง ชนโรง หนังมูฟวี่",
-"author": "8/6/69",
 "stations": [ 
     {
         "name": "A Shop for Killers (2026) ร้านลับนักฆ่า Season 2",
@@ -53,7 +51,7 @@
 "image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
 "info": "เสียง : ไทย ",
 "url": "https://main.24playerhd.com/newplaylist/f30b44831a6124ab5a71e8a0/f30b44831a6124ab5a71e8a0.m3u8",
-"referer": "https://main.24playerhd.com/"},
+"referer": "https://main.24playerhd.com/"}
     ]
         },
         {
@@ -107,7 +105,7 @@
 "image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
 "info": "เสียง : ไทย ",
 "url": "https://main.24playerhd.com/newplaylist/a66795e46375c6bb09f5b845/a66795e46375c6bb09f5b845.m3u8",
-"referer": "https://main.24playerhd.com/"},
+"referer": "https://main.24playerhd.com/"}
         ]
         },
         {
@@ -185,7 +183,9 @@
 "image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
 "info": "เสียง : ไทย ",
 "url": "https://main.24playerhd.com/newplaylist/627a34d7d98989cb703e2d46/627a34d7d98989cb703e2d46.m3u8",
-"referer": "https://main.24playerhd.com/"},
-}
-]
+"referer": "https://main.24playerhd.com/"
+                            }
+      ]
+    }
+  ]
 }
