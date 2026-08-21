@@ -1,505 +1,159 @@
 {
-  "groups": [
+"name": "หนัง ชนโรง หนังมูฟวี่",
+"author": "8/6/69",
+"stations": [ 
     {
-      "name": "A Shop for Killers (2026) ร้านลับนักฆ่า Season 2",
-"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
-"stations": [
-{
-"name": "ร้านลับนักฆ่า Season 2 EP 1",
-"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/f7cc0c60ab7b0b528fb8251f/f7cc0c60ab7b0b528fb8251f.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ร้านลับนักฆ่า Season 2 EP 2",
-"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/2a90782a4df05d157c73fb2c/2a90782a4df05d157c73fb2c.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ร้านลับนักฆ่า Season 2 EP 3",
-"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/91f04d5887a8abfd3dba8ee8/91f04d5887a8abfd3dba8ee8.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ร้านลับนักฆ่า Season 2 EP 4",
-"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/f3cb8858a2f14f74ad0ce4a0/f3cb8858a2f14f74ad0ce4a0.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ร้านลับนักฆ่า Season 2 EP 5",
-"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/f1ab5441406ec17237bf25eb/f1ab5441406ec17237bf25eb.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ร้านลับนักฆ่า Season 2 EP 6",
-"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/5794de9309e56d97485c6d2d/5794de9309e56d97485c6d2d.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ร้านลับนักฆ่า Season 2 EP 7",
-"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/39c38cb18a707aac99547e1d/39c38cb18a707aac99547e1d.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ร้านลับนักฆ่า Season 2 EP 8",
-"image": "https://media.online-station.net/images/2026/07/e184c43831d9315eeb38145d2e50c657.jpeg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/f30b44831a6124ab5a71e8a0/f30b44831a6124ab5a71e8a0.m3u8",
-"referer": "https://main.24playerhd.com/"
-              }
-      ]
+        "name": "Disclosure Day (2026) วันเปิดโปง ไขปริศนาลวงโลก",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/x_XfO-kWjdSqZ/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/06/Disclosure-Day-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
     },
     {
-      "name": "A Shop for Killers (2024) มรดกร้านนักฆ่า Season 1",
-"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
-"stations": [
-{
-"name": "มรดกร้านนักฆ่า Season 1 EP 1",
-"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/881f99f17263f1c06be00d49/881f99f17263f1c06be00d49.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "มรดกร้านนักฆ่า Season 1 EP 2",
-"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/593f1f276aa9baf0d776ca9c/593f1f276aa9baf0d776ca9c.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "มรดกร้านนักฆ่า Season 1 EP 3",
-"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/dfbac223bd849024ea85ea71/dfbac223bd849024ea85ea71.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "มรดกร้านนักฆ่า Season 1 EP 4",
-"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/c97cdbb0b2d48e78bed6e23c/c97cdbb0b2d48e78bed6e23c.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "มรดกร้านนักฆ่า Season 1 EP 5",
-"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/0462321ded80306b580d2b96/0462321ded80306b580d2b96.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "มรดกร้านนักฆ่า Season 1 EP 6",
-"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/3f9f989edff7da3f232dd30c/3f9f989edff7da3f232dd30c.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "มรดกร้านนักฆ่า Season 1 EP 7",
-"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/c07fc52755c8166e4eecfb59/c07fc52755c8166e4eecfb59.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "มรดกร้านนักฆ่า Season 1 EP 8",
-"image": "https://s359.kapook.com/pagebuilder/d3dac43d-4c01-44cc-bd5e-fe0182c15c8c.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/a66795e46375c6bb09f5b845/a66795e46375c6bb09f5b845.m3u8",
-"referer": "https://main.24playerhd.com/"
-              }
-      ]
+        "name": "Seven Snipers (2026)",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/B-2CIVv4_rbxk/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/06/Seven-Snipers-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
     },
     {
-"name": "The Apartment Job (2026) ท่านประธานกำมะลอ",
-"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
-"stations": [
-{
-"name": "ท่านประธานกำมะลอ EP 1",
-"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/d3350ca28c98b8cde88f98dd/d3350ca28c98b8cde88f98dd.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ท่านประธานกำมะลอ EP 2",
-"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/9154384ea9cb995655b4d27e/9154384ea9cb995655b4d27e.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ท่านประธานกำมะลอ EP 3",
-"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/c990e7c1cbf4709e1e9b244c/c990e7c1cbf4709e1e9b244c.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ท่านประธานกำมะลอ EP 4",
-"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/4b8dfc036d83683a0a65a2c6/4b8dfc036d83683a0a65a2c6.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ท่านประธานกำมะลอ EP 5",
-"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/4f139a150b6468553efcf153/4f139a150b6468553efcf153.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ท่านประธานกำมะลอ EP 6",
-"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/1f895286cd77c0c05abcb2b9/1f895286cd77c0c05abcb2b9.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ท่านประธานกำมะลอ EP 7",
-"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/5a520fc8870d6959c36ffd57/5a520fc8870d6959c36ffd57.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ท่านประธานกำมะลอ EP 8",
-"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/199e3ac143a7cfe27b754674/199e3ac143a7cfe27b754674.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ท่านประธานกำมะลอ EP 9",
-"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/05acf14cc54ef2280f7e5835/05acf14cc54ef2280f7e5835.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ท่านประธานกำมะลอ EP 10",
-"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/d7bb3a611a9629e048908326/d7bb3a611a9629e048908326.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ท่านประธานกำมะลอ EP 11",
-"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/eca3c53aff072e89b09f742b/eca3c53aff072e89b09f742b.m3u8",
-"referer": "https://main.24playerhd.com/"},
-{
-"name": "ท่านประธานกำมะลอ EP 12",
-"image": "https://s359.kapook.com/pagebuilder/0d9e5f39-d825-410b-8bd2-d907dbb72988.jpg",
-"info": "เสียง : ไทย ",
-"url": "https://main.24playerhd.com/newplaylist/627a34d7d98989cb703e2d46/627a34d7d98989cb703e2d46.m3u8",
-"referer": "https://main.24playerhd.com/"
-             }
-      ]
+        "name": "Whistle (2026) หวีดเรียกผี",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/f8-k0g62Qz_Gl/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/06/Whistle-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
     },
     {
-      "name": "Our Sticky Love (2026) รักติดหนึบ",
-      "image": "https://s359.kapook.com/pagebuilder/ce1f0901-1693-42c2-9bab-d7210e014f96.jpg",
-      "stations": [
-        {
-          "name": "รักติดหนึบ EP 1",
-          "image": "https://s359.kapook.com/pagebuilder/ce1f0901-1693-42c2-9bab-d7210e014f96.jpg",
-          "info": "เสียง : ไทย ",
-          "url": "https://vdohls.com/W_UvVgT-mWAKo/playlist.m3u8",
-          "Referer": "https://vdohls.com/",
+        "name": "The Amazing Digital Circus The Last Act (2026) มหัศจรรย์ดิจิทัลเซอร์คัส องก์สุดท้าย",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/C_11ELt-GRQ7O/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/06/The-Amazing-Digital-Circus-The-Last-Act-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+    },
+    {
+        "name": "Backrooms (2026) นรกห้องลับ",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/H8Wm_Lr-zNmbo/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/06/Backrooms-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+    },
+    {
+        "name": "Scary Movie (2026) ยำหนังจี้",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/4bkR_armk-15y/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/06/Scary-Movie-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36",
       "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
-        },
-        {
-          "name": "รักติดหนึบ EP 2",
-          "image": "https://s359.kapook.com/pagebuilder/ce1f0901-1693-42c2-9bab-d7210e014f96.jpg",
-          "info": "เสียง : ไทย ",
-          "url": "https://main.24playerhd.com/newplaylist/900708eccbbda66596cfb1e5/900708eccbbda66596cfb1e5.m3u8",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "รักติดหนึบ EP 3",
-          "image": "https://s359.kapook.com/pagebuilder/ce1f0901-1693-42c2-9bab-d7210e014f96.jpg",
-          "info": "เสียง : ไทย ",
-          "url": "https://main.24playerhd.com/newplaylist/8e97579737207253bb1c846e/8e97579737207253bb1c846e.m3u8",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "รักติดหนึบ EP 4",
-          "image": "https://s359.kapook.com/pagebuilder/ce1f0901-1693-42c2-9bab-d7210e014f96.jpg",
-          "info": "เสียง : ไทย ",
-          "url": "https://main.24playerhd.com/newplaylist/41ffc9c7555f8171790f3a06/41ffc9c7555f8171790f3a06.m3u8",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "รักติดหนึบ EP 5",
-          "image": "https://s359.kapook.com/pagebuilder/ce1f0901-1693-42c2-9bab-d7210e014f96.jpg",
-          "info": "เสียง : ไทย ",
-          "url": "https://main.24playerhd.com/newplaylist/4f70880c5f55d08b946c857d/4f70880c5f55d08b946c857d.m3u8",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "รักติดหนึบ EP 6",
-          "image": "https://s359.kapook.com/pagebuilder/ce1f0901-1693-42c2-9bab-d7210e014f96.jpg",
-          "info": "เสียง : ไทย ",
-          "url": "https://main.24playerhd.com/newplaylist/436a8b5a1df0858735ff1664/436a8b5a1df0858735ff1664.m3u8",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "รักติดหนึบ EP 7",
-          "image": "https://s359.kapook.com/pagebuilder/ce1f0901-1693-42c2-9bab-d7210e014f96.jpg",
-          "info": "เสียง : ไทย ",
-          "url": "https://main.24playerhd.com/newplaylist/c85ec5c2e3ebaeed5ac39da0/c85ec5c2e3ebaeed5ac39da0.m3u8",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "รักติดหนึบ EP 8",
-          "image": "https://s359.kapook.com/pagebuilder/ce1f0901-1693-42c2-9bab-d7210e014f96.jpg",
-          "info": "เสียง : ไทย ",
-          "url": "https://main.24playerhd.com/newplaylist/0ce761488db4e7b9c95eeb4b/0ce761488db4e7b9c95eeb4b.m3u8",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "รักติดหนึบ EP 9",
-          "image": "https://s359.kapook.com/pagebuilder/ce1f0901-1693-42c2-9bab-d7210e014f96.jpg",
-          "info": "เสียง : ไทย ",
-          "url": "https://main.24playerhd.com/newplaylist/85e896d73ccc9f6fd526fe9c/85e896d73ccc9f6fd526fe9c.m3u8",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "รักติดหนึบ EP 10",
-          "image": "https://s359.kapook.com/pagebuilder/ce1f0901-1693-42c2-9bab-d7210e014f96.jpg",
-          "info": "เสียง : ไทย ",
-          "url": "https://main.24playerhd.com/newplaylist/f5b3de1a7f60d5df16d115ef/f5b3de1a7f60d5df16d115ef.m3u8",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "รักติดหนึบ EP 11",
-          "image": "https://s359.kapook.com/pagebuilder/ce1f0901-1693-42c2-9bab-d7210e014f96.jpg",
-          "info": "เสียง : ไทย ",
-          "url": "https://main.24playerhd.com/newplaylist/6b713b2fa01caf56aedcb091/6b713b2fa01caf56aedcb091.m3u8",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "รักติดหนึบ EP 12",
-          "image": "https://s359.kapook.com/pagebuilder/ce1f0901-1693-42c2-9bab-d7210e014f96.jpg",
-          "info": "เสียง : ไทย ",
-          "url": "https://main.24playerhd.com/newplaylist/868f1ad63e7775131ce3b1f0/868f1ad63e7775131ce3b1f0.m3u8",
-          "referer": "https://main.24.playerhd.com/"
-        }
-      ]
     },
     {
-      "name": "Teach You a Lesson (2026) อย่างนี้ต้องโดนสั่งสอน ตอน 1-10",
-            "image": "https://ok24hd.com/wp-content/uploads/2026/06/Teach-You-a-Lesson-2026.webp",
-            "stations": [
-                {
-                    "name": "ตอนที่ 1",
-                    "image": "https://ok24hd.com/wp-content/uploads/2026/06/Teach-You-a-Lesson-2026.webp",
-                    "info": "พากย์ไทย",
-                    "url": "https://vdohls.com/h1-9G_neQZS8w/playlist.m3u8",
-                    "referer": "https://vdohls.com/",
-                        "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
-                },
-                {
-                    "name": "ตอนที่ 2",
-                    "image": "https://ok24hd.com/wp-content/uploads/2026/06/Teach-You-a-Lesson-2026.webp",
-                    "info": "พากย์ไทย",
-                    "url": "https://vdohls.com/fZzB-mjXj_udq/playlist.m3u8",
-                    "referer": "https://vdohls.com/"
-                },
-                {
-                    "name": "ตอนที่ 3",
-                    "image": "https://ok24hd.com/wp-content/uploads/2026/06/Teach-You-a-Lesson-2026.webp",
-                    "info": "พากย์ไทย",
-                    "url": "https://vdohls.com/Bfy-vQa_yP3by/playlist.m3u8",
-                    "referer": "https://vdohls.com/"
-                },
-                {
-                    "name": "ตอนที่ 4",
-                    "image": "https://ok24hd.com/wp-content/uploads/2026/06/Teach-You-a-Lesson-2026.webp",
-                    "info": "พากย์ไทย",
-                    "url": "https://vdohls.com/pLk_PB-51xBWG/playlist.m3u8",
-                    "referer": "https://vdohls.com/"
-                 }
-                ]
-              },
-              {
-      "name": "Our Dazzling Days (2026) วันที่เปล่งประกายของสองเรา (จบแล้ว)",
-      "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-      "stations": [
-        {
-          "name": "ตอนที่ 1",
-          "url": "https://main.24playerhd.com/newplaylist/78755e1ab2847da91989cd21/78755e1ab2847da91989cd21.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 2",
-          "url": "https://main.24playerhd.com/newplaylist/39421f179ed0788250c5e22c/39421f179ed0788250c5e22c.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 3",
-          "url": "https://main.24playerhd.com/newplaylist/d7fc2023a2b1ed225cefcac1/d7fc2023a2b1ed225cefcac1.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 4",
-          "url": "https://main.24playerhd.com/newplaylist/99b234658d4451105f25a803/99b234658d4451105f25a803.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 5",
-          "url": "https://main.24playerhd.com/newplaylist/81c8b0309ebe804b2bf853b9/81c8b0309ebe804b2bf853b9.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 6",
-          "url": "https://main.24playerhd.com/newplaylist/b67e72f7b6338f6da9984b71/b67e72f7b6338f6da9984b71.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 7",
-          "url": "https://main.24playerhd.com/newplaylist/f444d43e622e4a53ff5d7588/f444d43e622e4a53ff5d7588.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 8",
-          "url": "https://main.24playerhd.com/newplaylist/306d0de8a28e1bfc3b171a0e/306d0de8a28e1bfc3b171a0e.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 9",
-          "url": "https://main.24playerhd.com/newplaylist/b520653edc121d8cf81bb5dc/b520653edc121d8cf81bb5dc.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 10",
-          "url": "https://main.24playerhd.com/newplaylist/6fa90c3f72accaf6eefaf165/6fa90c3f72accaf6eefaf165.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 11",
-          "url": "https://main.24playerhd.com/newplaylist/5261891165b755d048fe774c/5261891165b755d048fe774c.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 12",
-          "url": "https://main.24playerhd.com/newplaylist/5e8aec2e8b4811058a483581/5e8aec2e8b4811058a483581.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 13",
-          "url": "https://main.24playerhd.com/newplaylist/c8521c3e34aca76850c32b81/c8521c3e34aca76850c32b81.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 14",
-          "url": "https://main.24playerhd.com/newplaylist/322e2d061801fae44a8e5613/322e2d061801fae44a8e5613.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 15",
-          "url": "https://main.24playerhd.com/newplaylist/922dc306c45d1326067e2803/922dc306c45d1326067e2803.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 16",
-          "url": "https://main.24playerhd.com/newplaylist/c3ff09c5aa7b473fc2546056/c3ff09c5aa7b473fc2546056.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 17",
-          "url": "https://main.24playerhd.com/newplaylist/9819a1965b13a6f8096e6aad/9819a1965b13a6f8096e6aad.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 18",
-          "url": "https://main.24playerhd.com/newplaylist/f1938f83ac8a81788df2a389/f1938f83ac8a81788df2a389.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 19",
-          "url": "https://main.24playerhd.com/newplaylist/b837f71a4846fb0544f3ec0c/b837f71a4846fb0544f3ec0c.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 20",
-          "url": "https://main.24playerhd.com/newplaylist/04c625430b41ae7824ff95b0/04c625430b41ae7824ff95b0.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 21",
-          "url": "https://main.24playerhd.com/newplaylist/7e44eb2f0d3b872648646e95/7e44eb2f0d3b872648646e95.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 22",
-          "url": "https://main.24playerhd.com/newplaylist/98fa509413752113c22256f9/98fa509413752113c22256f9.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 23",
-          "url": "https://main.24playerhd.com/newplaylist/87ebb83ffd71d35261a0dbc6/87ebb83ffd71d35261a0dbc6.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 24",
-          "url": "https://main.24playerhd.com/newplaylist/f3b8b35543d8aab3e912d093/f3b8b35543d8aab3e912d093.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 25",
-          "url": "https://main.24playerhd.com/newplaylist/42169f2f6fc3d55250839d63/42169f2f6fc3d55250839d63.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 26",
-          "url": "https://main.24playerhd.com/newplaylist/9c51a76d8fc1f5d9bf7083df/9c51a76d8fc1f5d9bf7083df.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 27",
-          "url": "https://main.24playerhd.com/newplaylist/bc8b90b99f5eb9b249a1b5ab/bc8b90b99f5eb9b249a1b5ab.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 28",
-          "url": "https://main.24playerhd.com/newplaylist/ed750c3a25f86ec2619cbdad/ed750c3a25f86ec2619cbdad.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 29",
-          "url": "https://main.24playerhd.com/newplaylist/f583a9351316f9d2da593984/f583a9351316f9d2da593984.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        },
-        {
-          "name": "ตอนที่ 30",
-          "url": "https://main.24playerhd.com/newplaylist/062276be52dd5c99f31cde0f/062276be52dd5c99f31cde0f.m3u8",
-          "image": "https://www.seriedays.com/wp-content/uploads/2026/02/Our-Dazzling-Days-2026-วันที่เปล่งประกายของสองเรา-187x269.jpg",
-          "referer": "https://main.24playerhd.com/"
-        }
-      ]
-    }
-  ]
+        "name": "Scare Out (2026) เกมล่าทรชน คนล่าคน",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/Rh-X1_iW9dL8e/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/06/Scare-Out-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+    },
+    {
+        "name": "Mobile Suit Gundam Hathaway The Sorcery of Nymph Circe (2026) โมบิลสูท กันดั้ม ฮาธาเวย์ เดอะ ซอร์เซอรี ออฟ นิมฟ์ เซอร์ซี",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/m_Ku-x3GeFrrS/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/06/Mobile-Suit-Gundam-Hathaway-The-Sorcery-of-Nymph-Circe-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+    },
+    {
+        "name": "The Legend Hunters (2026) โมจิน โคตรคนล่าสุสาน",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/Z-MSp1Eu2S_kF/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/06/The-Legend-Hunters-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+    },
+    {
+        "name": "Hokum (2026) ห้องกุมวิญญาณ",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/YCY-RiB_rpKpi/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/05/Hokum-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+    },
+    {
+        "name": "Tuner (2026)",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/dou_k7W-SzoEG/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/05/Tuner-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+    },
+    {
+        "name": "Masters of the Universe (2026) นักรบเจ้าจักรวาล",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/bFLr_ac5A-qi3/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/05/Masters-of-the-Universe-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+    },
+    {
+        "name": "Colony (2026) ยึดร่างคลั่ง",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/0-x_RbTso4jNO/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/05/Colony-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+    },
+    {
+        "name": "Passenger (2026) ผู้ร่วมทางตาย",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/BDHTaoYf-A_Vk/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/05/Passenger-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+    },
+    {
+        "name": "Star Wars The Mandalorian and Grogu (2026) แมนดาลอเรี่ยนและโกรกู",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/q-cE4_0AL4Ub0/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/05/Star-Wars-The-Mandalorian-and-Grogu-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+    },
+    {
+        "name": "Mother Mary (2026) มาเธอร์ แมรี่",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/CSAk_bLLBQ-9F/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/05/Mother-Mary-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+    },
+    {
+        "name": "Tensei Shitara Slime Datta Ken The Movie Tears Of The Azure Sea (2026) เกิดใหม่ทั้งทีก็เป็นสไลม์ไปซะแล้ว เดอะมูฟวี่ ภาคน้ำตาแห่งห้วงทะเลคราม",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/bzMLV_K5-cWGY/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/05/Tensei-Shitara-Slime-Datta-Ken-The-Movie-Tears-Of-The-Azure-Sea-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+    },
+    {
+        "name": "In the Grey (2026) เหลี่ยมจารชน คนเหนือเทา",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/Bba-W_Bj8cmBU/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/05/In-the-Grey-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+    },
+    {
+        "name": "Pegasus 3 (2026) ซัดสุดแรง แซงเต็มสปีด 3",
+        "info": "เสียง : เสียงโรง",
+        "url": "https://vdohls.com/ct_D6BHlG-vSQ/playlist.m3u8",
+        "image": "https://ok24hd.com/wp-content/uploads/2026/05/Pegasus-3-2026.webp",
+  "Referer": "https://vdohls.com/",
+  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+}
+]
 }
